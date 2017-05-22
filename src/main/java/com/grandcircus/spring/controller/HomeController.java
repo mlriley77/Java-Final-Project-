@@ -17,6 +17,16 @@ public class HomeController {
         return new ModelAndView("welcome", "hello", "hello world");
     }
 
+    @RequestMapping ("/register/family")//handler mapping
+    public String registerFamily(){//model and view method - has to return a model and view
+        return "newFamily";
+    }
+
+    @RequestMapping ("/register/user")//handler mapping
+    public String registerUser(){//model and view method - has to return a model and view
+        return "newUser";
+    }
+
 }
 
 

@@ -11,7 +11,8 @@
     <title>Spring Demo</title>
 </head>
 <body>
-
+<a href="${pageContext.request.contextPath}/register/family">Register A New Family Account</a>
+<a href="${pageContext.request.contextPath}/register/user">Register A New User Account</a>
 ${hello}
 
 </body>
