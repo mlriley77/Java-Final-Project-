@@ -43,4 +43,4 @@ target/
 
 #hibernate
 
-hibernate.cfg.xml
+src/main/resources/hibernate.cfg.xml
