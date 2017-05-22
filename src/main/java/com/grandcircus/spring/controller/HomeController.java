@@ -27,6 +27,11 @@ public class HomeController {
         return "newUser";
     }
 
+    @RequestMapping ("/dashboard/admin/new")//handler mapping
+    public String newAdmin(){//model and view method - has to return a model and view
+        return "adminDashboard";
+    }
+
 }
 
 
