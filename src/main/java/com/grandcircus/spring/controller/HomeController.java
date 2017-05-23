@@ -45,7 +45,7 @@ public class HomeController {
                            Model model){
 
         FamiliesEntity family = newFamily(famName);
-        UsersEntity user = newAdmin(fName,lName,email,0,password,family.getFamilyid());
+        UsersEntity user = newUser(fName,lName,email,0,password,family.getFamilyid());
 
         model.addAttribute("family", family);
         model.addAttribute("user", user);
@@ -68,7 +68,7 @@ public class HomeController {
                            @RequestParam("password") String password,
                            Model model){
 
-        UsersEntity user = newAdmin(fName,lName,email,1,password,famId);
+        UsersEntity user = newUser(fName,lName,email,1,password,famId);
 
         model.addAttribute("user", user);
 
@@ -89,7 +89,7 @@ public class HomeController {
         return newFamily;
     }
 
-    private UsersEntity newAdmin(String fName, String lName, String email, int usergroup, String password, int familyid) {
+    private UsersEntity newUser(String fName, String lName, String email, int usergroup, String password, int familyid) {
         Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configurationObject.buildSessionFactory();
         Session adminSession = sessionFactory.openSession();
