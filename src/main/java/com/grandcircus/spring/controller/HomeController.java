@@ -61,7 +61,7 @@ public class HomeController {
     }
 
     @RequestMapping (value = "/dashboard/admin/newChild/done", method = RequestMethod.POST)
-    public String newAdmin(@RequestParam("famId") int famId,
+    public String newChild(@RequestParam("famId") int famId,
                            @RequestParam("fName") String fName,
                            @RequestParam("lName") String lName,
                            @RequestParam("email") String email,
