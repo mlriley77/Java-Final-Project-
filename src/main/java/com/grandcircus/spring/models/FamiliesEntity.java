@@ -11,11 +11,13 @@ import javax.persistence.*;
 @Entity
 @Table(name = "families", schema = "checkin", catalog = "")
 public class FamiliesEntity {
+
     private int familyid;
     private String name;
 
     @Id
-    @Column(name = "familyid", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "familyid", updatable = false, nullable = false)
     public int getFamilyid() {
         return familyid;
     }

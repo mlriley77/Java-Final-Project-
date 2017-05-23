@@ -20,6 +20,7 @@ public class LocationsEntity {
     private String locality;
     private String state;
     private int zipcode;
+    private FamiliesEntity familiesByFamilyid;
 
     @Id
     @Column(name = "locationid", nullable = false)
@@ -143,5 +144,15 @@ public class LocationsEntity {
         result = 31 * result + (state != null ? state.hashCode() : 0);
         result = 31 * result + zipcode;
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "familyid", referencedColumnName = "familyid", nullable = false)
+    public FamiliesEntity getFamiliesByFamilyid() {
+        return familiesByFamilyid;
+    }
+
+    public void setFamiliesByFamilyid(FamiliesEntity familiesByFamilyid) {
+        this.familiesByFamilyid = familiesByFamilyid;
     }
 }

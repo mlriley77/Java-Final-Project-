@@ -12,27 +12,33 @@
 </head>
 <body>
 Register a new nest!
-<form action="${pageContext.request.contextPath}/dashboard/admin/new" method="post">
+<form action="${pageContext.request.contextPath}/dashboard/admin/newAccount" method="post">
     <h1>Family Unit</h1>
     Family Name: <input title="Family Name" type="text"
                         id="famName" name="famName"
-                        onclick="" /><br />
+                        onclick=""
+                        value="ABC" /><br />
     <h1>Leader Account</h1>
     First Name: <input title="First Name" type="text"
                        id="fName" name="fName"
-                       onclick="" /><br />
+                       onclick=""
+                       value="Sarah" /><br />
     Last Name: <input title="Last Name" type="text"
                       id="lName" name="lName"
-                      onclick="" /><br />
+                      onclick=""
+                      value="Guarino" /><br />
     Email: <input title="Email" type="text"
                   id="email" name="email"
-                  onclick="" /><br />
+                  onclick=""
+                  value="mary.higgins@rocketmail.com" /><br />
     Password: <input title="Password" type="password"
                      id="password" name="password"
-                     onclick="" /><br />
+                     onclick=""
+                     value="thisthat" /><br />
     Confirm Password: <input title="Confirm Password" type="password"
                              id="confPassword" name="confPassword"
-                             onclick="" /><br />
+                             onclick=""
+                             value="thisthat"/><br />
     <input type="submit" value="Register" />
 </form>
 </body>

@@ -5,8 +5,8 @@
 <hibernate-mapping>
 
     <class name="com.grandcircus.spring.models.FamiliesEntity" table="families" schema="checkin">
-        <id name="familyid">
-            <column name="familyid" sql-type="int(10) unsigned zerofill"/>
+        <id name="familyid" type="int" column="familyid">
+            <generator class="native" />
         </id>
         <property name="name">
             <column name="name" sql-type="varchar(45)" length="45"/>

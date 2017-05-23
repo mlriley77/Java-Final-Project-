@@ -4,33 +4,4 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="com.grandcircus.spring.models.LocationsEntity" table="locations" schema="checkin">
-        <id name="locationid">
-            <column name="locationid" sql-type="int(10) unsigned zerofill"/>
-        </id>
-        <property name="latitude">
-            <column name="latitude" sql-type="varchar(45)" length="45"/>
-        </property>
-        <property name="longitude">
-            <column name="longitude" sql-type="varchar(45)" length="45"/>
-        </property>
-        <property name="name">
-            <column name="name" sql-type="varchar(45)" length="45"/>
-        </property>
-        <property name="icon">
-            <column name="icon" sql-type="varchar(60)" length="60" not-null="true"/>
-        </property>
-        <property name="route">
-            <column name="route" sql-type="varchar(45)" length="45"/>
-        </property>
-        <property name="locality">
-            <column name="locality" sql-type="varchar(45)" length="45"/>
-        </property>
-        <property name="state">
-            <column name="state" sql-type="varchar(45)" length="45"/>
-        </property>
-        <property name="zipcode">
-            <column name="zipcode" sql-type="int(11)"/>
-        </property>
-    </class>
 </hibernate-mapping>

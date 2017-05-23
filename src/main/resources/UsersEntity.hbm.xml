@@ -23,5 +23,8 @@
         <property name="lname">
             <column name="lname" sql-type="varchar(45)" length="45"/>
         </property>
+        <property name="familyid">
+            <column name="familyid" />
+        </property>
     </class>
 </hibernate-mapping>

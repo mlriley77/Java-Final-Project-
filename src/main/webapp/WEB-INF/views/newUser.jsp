@@ -11,6 +11,29 @@
     <title>CheckIn - Register New User</title>
 </head>
 <body>
-Register New User
+<form action="${pageContext.request.contextPath}/dashboard/admin/newChild/done" method="post">
+    <h1>Family Unit</h1>
+    Family Id: <input title="Family Id Number" type="text"
+                      id="famId" name="famId"
+                      onclick=""
+                      value="${famId}" /><br />
+    <h1>Leader Account</h1>
+    First Name: <input title="First Name" type="text"
+                       id="fName" name="fName"
+                       onclick="" /><br />
+    Last Name: <input title="Last Name" type="text"
+                      id="lName" name="lName"
+                      onclick="" /><br />
+    Email: <input title="Email" type="text"
+                  id="email" name="email"
+                  onclick="" /><br />
+    Password: <input title="Password" type="password"
+                     id="password" name="password"
+                     onclick="" /><br />
+    Confirm Password: <input title="Confirm Password" type="password"
+                             id="confPassword" name="confPassword"
+                             onclick="" /><br />
+    <input type="submit" value="Register" />
+</form>
 </body>
 </html>
