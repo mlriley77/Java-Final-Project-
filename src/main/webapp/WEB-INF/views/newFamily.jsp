@@ -6,40 +6,98 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <html>
 <head>
     <title>CheckIn - Register New Nest</title>
 </head>
 <body>
-Register a new nest!
-<form action="${pageContext.request.contextPath}/dashboard/admin/newAccount" method="post">
+
+
+
+Register a new family!
+<form id="newFamily" action= "${pageContext.request.contextPath}/dashboard/admin/newAccount"  method="post">
     <h1>Family Unit</h1>
     Family Name: <input title="Family Name" type="text"
-                        id="famName" name="famName"
+                        id="famName" name="famName" required
                         onclick=""
-                        value="ABC" /><br />
+                        value="" /><br />
     <h1>Leader Account</h1>
-    First Name:<input title="First Name" type="text"
-                       id="fName" name="fName"
+    First Name: <input title="First Name" type="text"
+                       id="fName" name="fName" required
                        onclick=""
-                       value="Sarah" /><br />
+                       value="" /><br />
     Last Name: <input title="Last Name" type="text"
-                      id="lName" name="lName"
+                      id="lName" name="lName" required
                       onclick=""
-                      value="Guarino" /><br />
+                      value="" /><br />
     Email: <input title="Email" type="text"
-                  id="email" name="email"
+                  id="email" name="email" required
                   onclick=""
-                  value="mary.higgins@rocketmail.com" /><br />
+                  value="" onchange="emailValidation(this)"/> <div id="emailerror"> </div><br>
     Password: <input title="Password" type="password"
-                     id="password" name="password"
+                     id="password" name="password" required
                      onclick=""
-                     value="thisthat" /><br />
+                     value=""/><br />
     Confirm Password: <input title="Confirm Password" type="password"
                              id="confPassword" name="confPassword"
                              onclick=""
-                             value="thisthat"/><br />
-    <input type="submit" value="Register" />
+                             value="" onchange="formValidation()"/><br />
+    <input type="submit"  onsubmit="formValidation()" value="Register" />
+
 </form>
+
+
+<script>
+    function formValidation() {
+        var password = document.getElementById("password").value;
+        var confPassword = document.getElementById("confPassword").value;
+        var famName = document.getElementById("famName").value;
+        var email = document.getElementById("email").value;
+        var emailVal = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+        if (emailVal.test(email))
+        {
+            return (true)
+        }
+        alert("You have entered an invalid email address!");
+        return (false);
+
+        if (password !== confPassword) {
+            document.getElementById("password").style.borderColor = "#E34234";
+            document.getElementById("confPassword").style.borderColor = "#E34234";
+            alert("Passwords Do not match");
+        }
+        else {
+            alert("Passwords Match!!!");
+        }
+
+    }
+    function emailValidation(element) {
+        var email = element.value;
+        //console.log(element.value);
+        //var url = "http://localhost:8080/getemail2";
+        var url = "/getemail2";
+        $.get(url, {email:email} ,function(data){
+            console.log(data);
+            //process response
+            $("#emailerror").empty();
+            $("#emailerror").append(data);
+        });
+
+    }
+
+
+
+
+
+
+
+
+</script>
+
+<script src="//code.jquery.com/jquery-2.2.1.js"></script>
 </body>
+
+
 </html>

@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import org.json.JSONException;
@@ -42,8 +43,10 @@ public class HomeController {
 
     private static final String YourAPIKey = "D4DABD4A"; //Your API Key
 
-    @RequestMapping(value = "getemailJSON", method = RequestMethod.GET)
-    public String getEmailJSON(Model model, @RequestParam("email") String email) {
+
+
+    @RequestMapping(value = "getemail2", method = RequestMethod.GET, produces="application/text")
+    public @ResponseBody String getEmail2(@RequestParam("email") String email) {
         /**
          * The main program entry point
          * @param args the command line arguments
@@ -54,7 +57,8 @@ public class HomeController {
 //        // Create a scanner to read in the requested email address
 //        Scanner in = new Scanner(System.in);
 //        String readLine = in.next();
-
+        String result = null;
+        System.out.println("getemail2");
         try {
             // Format the request url to the correct structure for the request
             URL requestUrl = new URL(String.format(QueryFormatString, ApiUrl, YourAPIKey, email));
@@ -82,17 +86,18 @@ public class HomeController {
 
             JSONObject json = new JSONObject(response.toString());
 
-            String result = json.getJSONObject("emailVerification").getJSONObject("mailboxVerification").get("result").toString();
+            result = json.getJSONObject("emailVerification").getJSONObject("mailboxVerification").get("result").toString();
 
-            model.addAttribute("jsonString", result.toString());
+//            addAttribute("jsonString", result.toString());
 
         } catch (IOException ex) {
             Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return "welcome";
+        return result;
     }
+
 
     @RequestMapping("/")
     public ModelAndView helloWorld() {
