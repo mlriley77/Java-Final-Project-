@@ -19,7 +19,7 @@ Register a new nest!
                         onclick=""
                         value="ABC" /><br />
     <h1>Leader Account</h1>
-    First Name: <input title="First Name" type="text"
+    First Name:<input title="First Name" type="text"
                        id="fName" name="fName"
                        onclick=""
                        value="Sarah" /><br />

@@ -5,8 +5,8 @@
 <hibernate-mapping>
 
     <class name="com.grandcircus.spring.models.UsersEntity" table="users" schema="checkin">
-        <id name="userid" type="int" column="userid">
-            <generator class="native" />
+        <id name="userid">
+            <column name="userid" sql-type="int(10) unsigned zerofill"/>
         </id>
         <property name="usergroup">
             <column name="usergroup" sql-type="int(11)"/>
@@ -24,10 +24,7 @@
             <column name="lname" sql-type="varchar(45)" length="45"/>
         </property>
         <property name="familyid">
-            <column name="familyid" sql-type="int(11) unsigned zerofill"/>
+            <column name="familyid" />
         </property>
-        <!--<many-to-one name="familiesByFamilyid" class="com.grandcircus.spring.models.FamiliesEntity">-->
-            <!--<column name="familyid"/>-->
-        <!--</many-to-one>-->
     </class>
 </hibernate-mapping>

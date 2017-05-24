@@ -3,6 +3,7 @@
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
+
     <class name="com.grandcircus.spring.models.FamiliesEntity" table="families" schema="checkin">
         <id name="familyid" type="int" column="familyid">
             <generator class="native" />
@@ -10,11 +11,5 @@
         <property name="name">
             <column name="name" sql-type="varchar(45)" length="45"/>
         </property>
-        <set name="usersByFamilyid" inverse="true">
-            <key>
-                <column name="familyid"/>
-            </key>
-            <one-to-many not-found="ignore" class="com.grandcircus.spring.models.UsersEntity"/>
-        </set>
     </class>
 </hibernate-mapping>

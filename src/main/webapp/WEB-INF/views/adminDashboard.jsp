@@ -9,51 +9,8 @@
 <html>
 <head>
     <title>CheckIn - Admin Dashboard</title>usergroup
-    <style>
-        body {margin:0;}
-
-        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #3BB9FF;
-            position: fixed;
-            top: 0;
-            width: 100%;
-        }
-
-        li {
-            float: left;
-        }
-
-        li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-            font-family: Tahoma;
-        }
-
-        li a:hover:not(.active) {
-            background-color: #FFA62F;
-        }
-
-        .active {
-            background-color: #FFA62F;
-        }
-    </style>
 </head>
 <body>
-
-<ul>
-    <li><a class="active" href="adminDashboard.jsp">Parent Console</a></li>
-    <li><a href="childConsole.jsp">Child Console</a></li>
-    <li><a href="welcome.jsp">Logout</a></li>
-</ul>
-
-
 The ${family.name} ID#: ${family.familyid}<br />
 <a href="${pageContext.request.contextPath}/dashboard/admin/newChild?id=${family.familyid}">Create a sub-account</a>
 </body>
