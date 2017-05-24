@@ -169,6 +169,11 @@ public class HomeController {
         return "adminDashboard";
     }
 
+    @RequestMapping("/childConsole")
+    public ModelAndView viewChildConsole() {
+        return new ModelAndView("childConsole", "hello", "hello world");
+    }
+
     private FamiliesEntity newFamily(String famName) {
         Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configurationObject.buildSessionFactory();
