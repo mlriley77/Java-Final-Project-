@@ -1,6 +1,7 @@
 package com.grandcircus.spring.models;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Class description
@@ -11,13 +12,12 @@ import javax.persistence.*;
 @Entity
 @Table(name = "families", schema = "checkin", catalog = "")
 public class FamiliesEntity {
-
     private int familyid;
     private String name;
+    private Collection<UsersEntity> usersByFamilyid;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "familyid", updatable = false, nullable = false)
+    @Column(name = "familyid", nullable = false)
     public int getFamilyid() {
         return familyid;
     }
@@ -54,5 +54,14 @@ public class FamiliesEntity {
         int result = familyid;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "familiesByFamilyid")
+    public Collection<UsersEntity> getUsersByFamilyid() {
+        return usersByFamilyid;
+    }
+
+    public void setUsersByFamilyid(Collection<UsersEntity> usersByFamilyid) {
+        this.usersByFamilyid = usersByFamilyid;
     }
 }

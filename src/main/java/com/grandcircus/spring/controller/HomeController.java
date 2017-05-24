@@ -2,16 +2,21 @@ package com.grandcircus.spring.controller;
 
 import com.grandcircus.spring.models.FamiliesEntity;
 import com.grandcircus.spring.models.UsersEntity;
+import org.apache.http.HttpResponse;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -115,7 +120,8 @@ public class HomeController {
                            @RequestParam("lName") String lName,
                            @RequestParam("email") String email,
                            @RequestParam("password") String password,
-                           Model model) {
+                           Model model,
+                           HttpServletResponse response) {
 
         FamiliesEntity family = newFamily(famName);
         UsersEntity user = newUser(fName, lName, email, 0, password, family.getFamilyid());
@@ -123,7 +129,22 @@ public class HomeController {
         model.addAttribute("family", family);
         model.addAttribute("user", user);
 
+        Cookie loginCookie = new Cookie("userId", Integer.toString(user.getUserid()));
+        response.addCookie(loginCookie);
+
         return "adminDashboard";
+    }
+
+    @RequestMapping("/dashboard/admin")
+    public String adminPage(@CookieValue(value = "userId", defaultValue = "null") String userId,
+                            Model model) {
+        if (userId.equals("null")) {
+            return "welcome";
+        }
+
+        model.addAttribute("userId", userId);
+
+        return "testView";
     }
 
     @RequestMapping("/dashboard/admin/newChild")
@@ -149,7 +170,7 @@ public class HomeController {
     }
 
     private FamiliesEntity newFamily(String famName) {
-        Configuration configurationObject = new Configuration().configure("Hibernate.cfg.xml");
+        Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configurationObject.buildSessionFactory();
         Session adminSession = sessionFactory.openSession();
         Transaction familyTransaction = adminSession.beginTransaction();
@@ -163,7 +184,7 @@ public class HomeController {
     }
 
     private UsersEntity newUser(String fName, String lName, String email, int usergroup, String password, int familyid) {
-        Configuration configurationObject = new Configuration().configure("Hibernate.cfg.xml");
+        Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configurationObject.buildSessionFactory();
         Session adminSession = sessionFactory.openSession();
         Transaction userTransaction = adminSession.beginTransaction();
