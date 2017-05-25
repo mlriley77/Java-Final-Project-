@@ -50,7 +50,7 @@
     <title>CheckIn - Admin Dashboard</title>usergroup
 <ul>
     <li><a class="active" href="adminDashboard.jsp">Parent Console</a></li>
-    <li><a href="childConsole.jsp">Child Console</a></li>
+    <li><a href="childDashboard.jsp">Child Console</a></li>
     <li><a href="welcome.jsp">Logout</a></li>
 </ul>
 

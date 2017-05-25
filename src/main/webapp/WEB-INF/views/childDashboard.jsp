@@ -49,7 +49,7 @@
 
 <ul>
     <li><a href="adminDashboard.jsp">Parent Console</a></li>
-    <li><a class="active" href="childConsole.jsp">Child Console</a></li>
+    <li><a class="active" href="childDashboard.jsp">Child Console</a></li>
     <li><a href="welcome.jsp">Logout</a></li>
 </ul>
 
