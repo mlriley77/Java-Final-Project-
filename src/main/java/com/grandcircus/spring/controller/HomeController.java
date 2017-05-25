@@ -1,6 +1,7 @@
 package com.grandcircus.spring.controller;
 
 import com.grandcircus.spring.models.FamiliesEntity;
+import com.grandcircus.spring.models.LocationsEntity;
 import com.grandcircus.spring.models.UsersEntity;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.web.servlet.ModelAndView;
+//import sun.jvm.hotspot.code.Location;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -186,6 +189,13 @@ public class HomeController {
         return "login";
     }
 
+
+    @RequestMapping("/cdash")
+    public ModelAndView childDashboard() {
+        return new ModelAndView("childDashboard");
+    }
+
+
     @RequestMapping(value = "/dashboard", method = RequestMethod.POST)
     public String loggedIn(@RequestParam(value = "email", required = false) String email,
                            @RequestParam(value = "password", required = false) String password,
@@ -232,7 +242,7 @@ public class HomeController {
 
 
 
-    @RequestMapping("/dashboard/admin")
+        @RequestMapping("/dashboard/admin")
     public String adminPage(@CookieValue(value = "userId", defaultValue = "null") String userId,
                             Model model) {
         if (userId.equals("null")) {
@@ -272,9 +282,6 @@ public class HomeController {
         return "adminDashboard";
     }
 
-
-
-
     private FamiliesEntity newFamily(String famName) {
         Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configurationObject.buildSessionFactory();
@@ -289,12 +296,14 @@ public class HomeController {
         return newFamily;
     }
 
+
     private UsersEntity newUser(String fName,
                                 String lName,
                                 String email,
                                 int usergroup,
                                 String password,
                                 int familyid) {
+
         Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configurationObject.buildSessionFactory();
         Session adminSession = sessionFactory.openSession();
@@ -313,6 +322,24 @@ public class HomeController {
 
         return user;
     }
+
+//    private LocationsEntity pushMaplatitude (String latitude){
+//        Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
+//        SessionFactory sessionFactory = configurationObject.buildSessionFactory();
+//        Session map = sessionFactory.openSession();
+//
+//        Transaction mapTransaction = map.beginTransaction();
+//        LocationsEntity latlocation = new LocationsEntity();
+//
+//        latlocation.setLatitude(latitude);
+//
+//
+//
+//        mapTransaction.commit();
+//        return latlocation;
+//    }
+
+
 }
 
 
