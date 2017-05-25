@@ -121,13 +121,24 @@ public class HomeController {
         return "welcome";
     }
 
+    @RequestMapping(value = "/action=logout")
+    public String logOut(Model model,
+                         HttpServletResponse response) {
+
+        Cookie userId = new Cookie("userId", "null");
+        userId.setPath("/");
+        userId.setMaxAge(0);
+        response.addCookie(userId);
+
+        return "redirect:/";
+    }
+
     @RequestMapping(value = "/action=register/family", method = RequestMethod.GET)
     public String registerFamily(Model model) {
         model.addAttribute("err", errorMsg);
         return "newFamily";
     }
 
-    // page for adding new user
     @RequestMapping(value = "/action=register/user", method = RequestMethod.GET)
     public String registerUser(Model model,
                                HttpServletResponse response) {
@@ -141,9 +152,7 @@ public class HomeController {
         return "newUser";
     }
 
-
-    // page after adding new user
-    @RequestMapping(value = "/dashboard/new", method = RequestMethod.POST)
+    @RequestMapping(value = "/dashboard/newuser", method = RequestMethod.POST)
     public String newChild(@RequestParam("famId") int famId,
                            @RequestParam("fName") String fName,
                            @RequestParam("lName") String lName,
@@ -178,7 +187,7 @@ public class HomeController {
         } catch (NullPointerException e) {
             UsersEntity user = newUser(fName, lName, email, 1, password, famId);
             model.addAttribute("user", user);
-            return "childDashboard";
+            return "redirect:/action=login";
         }
     }
 
@@ -233,12 +242,6 @@ public class HomeController {
             return "redirect:/action=login";
         }
     }
-
-
-
-
-
-
 
 
 

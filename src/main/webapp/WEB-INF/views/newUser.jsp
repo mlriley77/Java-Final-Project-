@@ -11,7 +11,7 @@
     <title>CheckIn - Register New User</title>
 </head>
 <body>
-<form action="${pageContext.request.contextPath}/dashboard/new" method="post">
+<form action="${pageContext.request.contextPath}/dashboard/newuser" method="post">
     ${err}
     <h1>Family Unit</h1>
     Family Id: <input title="Family Id Number" type="text"
