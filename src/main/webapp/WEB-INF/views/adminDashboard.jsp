@@ -26,6 +26,7 @@ ${navbar}
                 frameborder="0" scrolling="no"
                 marginheight="0" marginwidth="0" src="https://maps.google.com?output=embed"></iframe>
     </div>
+
     <script>
         var c = function(pos) {
             var lat = pos.coords.latitude,

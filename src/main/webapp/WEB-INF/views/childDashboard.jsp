@@ -16,34 +16,41 @@
 ${navbar}
 <h2>Dashboard</h2>
 <br><br><br>
-<form method="get" action="" onsubmit="return getLocation();">
+
+<form method="get" action="/checkIn" onsubmit="return getLocation()">
     <input type="text" id="lat" name="lat" /><br>
     <input type="text" id="long" name="long" /><br>
     <input type="submit" value ="Send location to your parent" name = "Submit" id="get_location" />
 </form>
+
+<div id="map">
+    <iframe id="google_map"
+            width="425" height="350"
+            frameborder="0" scrolling="no"
+            marginheight="0" marginwidth="0" src="https://maps.google.com?output=embed"></iframe>
+</div>
+
+${thisorthat}
+
 <script>
     var c = function(pos) {
         var lat = pos.coords.latitude,
             long = pos.coords.longitude,
             coords = lat + ', ' + long;
-
         document.getElementById('google_map').setAttribute('src', 'https://maps.google.com/?q=' + coords + '&z=60&output=embed');
         document.getElementById('lat').setAttribute('value', lat);
         document.getElementById('long').setAttribute('value', long);
     };
-
     var getLocationLink = document.getElementById('get_location');
     getLocationLink.onclick = function(){
         navigator.geolocation.getCurrentPosition(c);
         return false;
     };
-
     function getLocation () {
         console.log("help");
         navigator.geolocation.getCurrentPosition(c);
         return true;
     }
-
 </script>
 
 <script async defer

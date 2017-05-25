@@ -281,6 +281,14 @@ public class HomeController {
     }
 
 
+    @RequestMapping(value = "/checkIn", method = RequestMethod.POST)
+    public String checkin(@RequestParam(value = "lat") String latitutde,
+                           @RequestParam(value = "long") String longitude,
+                           Model model) {
+        System.out.println(latitutde + ", " + longitude);
+        model.addAttribute("thisorthat", "thisandthat");
+        return "childDashboard";
+    }
 
 
     // Sarah is still working on this
@@ -364,8 +372,6 @@ public class HomeController {
 //        mapTransaction.commit();
 //        return latlocation;
 //    }
-
-
 }
 
 
