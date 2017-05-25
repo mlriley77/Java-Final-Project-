@@ -64,14 +64,13 @@ Register a new family!
         return (false);
 
         if (password !== confPassword) {
-            document.getElementById("password").style.borderColor = "#E34234";
+            document.getElementById("password").style.borderColor = "#e34234";
             document.getElementById("confPassword").style.borderColor = "#E34234";
             alert("Passwords Do not match");
         }
         else {
             alert("Passwords Match!!!");
         }
-
     }
     function emailValidation(element) {
         var email = element.value;
@@ -84,13 +83,8 @@ Register a new family!
             $("#emailerror").empty();
             $("#emailerror").append(data);
         });
-
     }
-
 </script>
-
 <script src="//code.jquery.com/jquery-2.2.1.js"></script>
 </body>
-
-
 </html>

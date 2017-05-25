@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.web.servlet.ModelAndView;
+//import sun.jvm.hotspot.code.Location;
+
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +35,7 @@ import java.util.logging.Logger;
 
 @Controller
 public class HomeController {
-    private String loginError = "";
+    private String errorMsg = "";
 
     private static final String ApiUrl = "https://api.hippoapi.com/v3/more/json";
     /*
@@ -101,18 +103,17 @@ public class HomeController {
         return result;
     }
 
-
     @RequestMapping("/")
     public String helloWorld(@CookieValue(value = "userId", defaultValue = "null") String userId,
                              Model model) {
         if (userId.equals("null")) {
             model.addAttribute("homeNav",
-                    "<a href='http://localhost:8080/action=login'>Login</a> "
-                            + "<a href='http://localhost:8080/action=register/family'>Create A Family</a> "
+                    "You Are Not Logged In!<br /><a href='http://localhost:8080/action=login'>Login</a><br /> "
+                            + "<a href='http://localhost:8080/action=register/family'>Create A Family</a><br /> "
                             + "<a href='http://localhost:8080/action=register/user'>Join A Family</a>");
         } else {
             model.addAttribute("homeNav",
-                    "<a href='http://localhost:8080/action=register/user'>Add A Family Member</a> "
+                    "You Are Logged In!<br /><a href='http://localhost:8080/action=register/user'>Add A Family Member</a><br /> "
                             + "<a href='http://localhost:8080/action=logout'>Logout</a>");
             //should also load user info at some point. need Load
         }
@@ -120,40 +121,80 @@ public class HomeController {
         return "welcome";
     }
 
-    @RequestMapping(value = "/register/family", method = RequestMethod.GET)
-    public String registerFamily() {
+    @RequestMapping(value = "/action=logout")
+    public String logOut(Model model,
+                         HttpServletResponse response) {
+
+        Cookie userId = new Cookie("userId", "null");
+        userId.setPath("/");
+        userId.setMaxAge(0);
+        response.addCookie(userId);
+
+        return "redirect:/";
+    }
+
+    @RequestMapping(value = "/action=register/family", method = RequestMethod.GET)
+    public String registerFamily(Model model) {
+        model.addAttribute("err", errorMsg);
         return "newFamily";
     }
-    @RequestMapping(value = "/register/user", method = RequestMethod.GET)
-    public String registerUser() {
+
+    @RequestMapping(value = "/action=register/user", method = RequestMethod.GET)
+    public String registerUser(Model model,
+                               HttpServletResponse response) {
+
+        Cookie userId = new Cookie("userId", "null");
+        userId.setPath("/");
+        userId.setMaxAge(0);
+        response.addCookie(userId);
+
+        model.addAttribute("err", errorMsg);
         return "newUser";
     }
 
-    /**
-     * Sends newly registered admin to their dashboard
-     *
-     * @return admin dashboard
-     */
-    @RequestMapping(value = "/dashboard/admin/newAccount", method = RequestMethod.POST)
-    public String newAdmin(@RequestParam("famName") String famName,
+    @RequestMapping(value = "/dashboard/newuser", method = RequestMethod.POST)
+    public String newChild(@RequestParam("famId") int famId,
                            @RequestParam("fName") String fName,
                            @RequestParam("lName") String lName,
                            @RequestParam("email") String email,
                            @RequestParam("password") String password,
                            Model model) {
 
-        FamiliesEntity family = newFamily(famName);
-        UsersEntity user = newUser(fName, lName, email, 0, password, family.getFamilyid());
+        Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configurationObject.buildSessionFactory();
+        Session adminSession = sessionFactory.openSession();
+        Transaction myTransaction = adminSession.beginTransaction();
 
-        model.addAttribute("family", family);
-        model.addAttribute("user", user);
+        Criteria familyCriteria = adminSession.createCriteria(FamiliesEntity.class);
+        Criteria usersCriteria = adminSession.createCriteria(UsersEntity.class);
 
-        return "adminDashboard";
+        try {
+            FamiliesEntity existingFamily = (FamiliesEntity) familyCriteria.add(Restrictions.eq("familyid", famId))
+                    .uniqueResult();
+            int doesThisExist = existingFamily.getFamilyid();
+
+        } catch (NullPointerException e) {
+            errorMsg = "This family ID does not exist";
+            return "redirect:/action=register/user";
+        }
+
+        try {
+            UsersEntity newUser = (UsersEntity) usersCriteria.add(Restrictions.eq("email", email))
+                    .uniqueResult();
+            String doesThisExist = newUser.getEmail();
+            errorMsg = "This email is already associated with an account.";
+            return "redirect:/action=register/user";
+        } catch (NullPointerException e) {
+            UsersEntity user = newUser(fName, lName, email, 1, password, famId);
+            model.addAttribute("user", user);
+            return "redirect:/action=login";
+        }
     }
 
+
     @RequestMapping(value = "/action=login", method = RequestMethod.GET)
-    public String loggingIn(Model model) {
-        model.addAttribute("err", loginError);
+    public String logIn(Model model) {
+        model.addAttribute("err", errorMsg);
         return "login";
     }
 
@@ -181,28 +222,27 @@ public class HomeController {
                     .uniqueResult();
             try {
                 if (!(loggedInUser.getPassword().equals(password))) {
-                    loginError = "Username or Password is incorrect.<br />";
+                    errorMsg = "Username or Password is incorrect.<br />";
                     return "redirect:/action=login";
                 } else {
                     Cookie userId = new Cookie("userId", Integer.toString(loggedInUser.getUserid()));
+                    userId.setPath("/");
+                    userId.setMaxAge(-1);
                     response.addCookie(userId);
-                    loginError = "";
+                    errorMsg = "";
                     return "adminDashboard";
                 }
             } catch (NullPointerException e) {
-                loginError = "Password returns null";
+                errorMsg = "Password returns null";
                 return "redirect:/action=login";
             }
 
         } catch(NullPointerException e) {
-            loginError = "Username or Password is incorrect.<br />";
+            errorMsg = "Username or Password is incorrect.<br />";
             return "redirect:/action=login";
         }
     }
 
-//    Criteria criteria = session.createCriteria(YourClass.class);
-//    YourObject yourObject = criteria.add(Restrictions.eq("yourField", yourFieldValue))
-//            .uniqueResult();
 
 
         @RequestMapping("/dashboard/admin")
@@ -217,30 +257,33 @@ public class HomeController {
         return "adminDashboard";
     }
 
-    @RequestMapping("/dashboard/admin/newChild")
-    public String registerNewChild(@RequestParam("id") int famId,
-                                   Model model,
-                                   @CookieValue(value = "userId", defaultValue = "null") String userId) {
-        model.addAttribute("famId", famId);
-        return "newUser";
-    }
 
-    @RequestMapping(value = "/dashboard/admin/newChild/done", method = RequestMethod.POST)
-    public String newChild(@RequestParam("famId") int famId,
+
+
+
+
+
+
+
+
+
+
+    @RequestMapping(value = "/dashboard/admin/newAccount", method = RequestMethod.POST)
+    public String newAdmin(@RequestParam("famName") String famName,
                            @RequestParam("fName") String fName,
                            @RequestParam("lName") String lName,
                            @RequestParam("email") String email,
                            @RequestParam("password") String password,
                            Model model) {
 
-        UsersEntity user = newUser(fName, lName, email, 1, password, famId);
+        FamiliesEntity family = newFamily(famName);
+        UsersEntity user = newUser(fName, lName, email, 0, password, family.getFamilyid());
 
+        model.addAttribute("family", family);
         model.addAttribute("user", user);
 
         return "adminDashboard";
     }
-
-    @RequestMapping("")
 
     private FamiliesEntity newFamily(String famName) {
         Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");

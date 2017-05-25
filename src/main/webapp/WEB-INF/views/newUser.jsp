@@ -11,12 +11,12 @@
     <title>CheckIn - Register New User</title>
 </head>
 <body>
-<form action="${pageContext.request.contextPath}/dashboard/admin/newChild/done" method="post">
+<form action="${pageContext.request.contextPath}/dashboard/newuser" method="post">
+    ${err}
     <h1>Family Unit</h1>
     Family Id: <input title="Family Id Number" type="text"
                       id="famId" name="famId"
-                      onclick=""
-                      value="${famId}" /><br />
+                      onclick="" /><br />
     <h1>Leader Account</h1>
     First Name: <input title="First Name" type="text"
                        id="fName" name="fName" required
@@ -62,7 +62,6 @@
         else {
             alert("Passwords Match!!!");
         }
-
     }
     function emailValidation(element) {
         var email = element.value;
@@ -75,18 +74,8 @@
             $("#emailerror").empty();
             $("#emailerror").append(data);
         });
-
     }
-
-
-
-
-
-
-
-
 </script>
-
 <script src="//code.jquery.com/jquery-2.2.1.js"></script>
 </body>
 </html>
