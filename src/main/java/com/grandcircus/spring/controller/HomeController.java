@@ -1,7 +1,6 @@
 package com.grandcircus.spring.controller;
 
 import com.grandcircus.spring.models.FamiliesEntity;
-import com.grandcircus.spring.models.LocationsEntity;
 import com.grandcircus.spring.models.UsersEntity;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.web.servlet.ModelAndView;
-import sun.jvm.hotspot.code.Location;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;

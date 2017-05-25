@@ -10,6 +10,7 @@
 <head>
     <title>Check-In - Home</title>
 </head>
+
 <body>
 <h1>Check-In</h1>
 -nav bar goes here-
@@ -18,6 +19,8 @@ ${homeNav}<br />
 Check-In is a....<br />
 
 ${jsonString}
+
+
 
 </body>
 </html>
