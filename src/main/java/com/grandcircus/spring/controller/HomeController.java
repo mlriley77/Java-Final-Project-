@@ -2,21 +2,21 @@ package com.grandcircus.spring.controller;
 
 import com.grandcircus.spring.models.FamiliesEntity;
 import com.grandcircus.spring.models.UsersEntity;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.*;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -32,6 +32,8 @@ import java.util.logging.Logger;
 
 @Controller
 public class HomeController {
+    private String loginError = "";
+
     private static final String ApiUrl = "https://api.hippoapi.com/v3/more/json";
     /*
      * Query string for request
@@ -100,13 +102,30 @@ public class HomeController {
 
 
     @RequestMapping("/")
-    public ModelAndView helloWorld() {
-        return new ModelAndView("welcome", "hello", "hello world");
+    public String helloWorld(@CookieValue(value = "userId", defaultValue = "null") String userId,
+                             Model model) {
+        if (userId.equals("null")) {
+            model.addAttribute("homeNav",
+                    "<a href='http://localhost:8080/action=login'>Login</a> "
+                            + "<a href='http://localhost:8080/action=register/family'>Create A Family</a> "
+                            + "<a href='http://localhost:8080/action=register/user'>Join A Family</a>");
+        } else {
+            model.addAttribute("homeNav",
+                    "<a href='http://localhost:8080/action=register/user'>Add A Family Member</a> "
+                            + "<a href='http://localhost:8080/action=logout'>Logout</a>");
+            //should also load user info at some point. need Load
+        }
+
+        return "welcome";
     }
 
     @RequestMapping(value = "/register/family", method = RequestMethod.GET)
     public String registerFamily() {
         return "newFamily";
+    }
+    @RequestMapping(value = "/register/user", method = RequestMethod.GET)
+    public String registerUser() {
+        return "newUser";
     }
 
     /**
@@ -131,9 +150,69 @@ public class HomeController {
         return "adminDashboard";
     }
 
+    @RequestMapping(value = "/action=login", method = RequestMethod.GET)
+    public String loggingIn(Model model) {
+        model.addAttribute("err", loginError);
+        return "login";
+    }
+
+    @RequestMapping(value = "/dashboard", method = RequestMethod.POST)
+    public String loggedIn(@RequestParam(value = "email", required = false) String email,
+                           @RequestParam(value = "password", required = false) String password,
+                           HttpServletResponse response,
+                           Model model) {
+
+        Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configurationObject.buildSessionFactory();
+        Session adminSession = sessionFactory.openSession();
+        Transaction myTransaction = adminSession.beginTransaction();
+
+        Criteria criteria = adminSession.createCriteria(UsersEntity.class);
+        try {
+            UsersEntity loggedInUser = (UsersEntity) criteria.add(Restrictions.eq("email", email))
+                    .uniqueResult();
+            try {
+                if (!(loggedInUser.getPassword().equals(password))) {
+                    loginError = "Username or Password is incorrect.<br />";
+                    return "redirect:/action=login";
+                } else {
+                    Cookie userId = new Cookie("userId", Integer.toString(loggedInUser.getUserid()));
+                    response.addCookie(userId);
+                    loginError = "";
+                    return "adminDashboard";
+                }
+            } catch (NullPointerException e) {
+                loginError = "Password returns null";
+                return "redirect:/action=login";
+            }
+
+        } catch(NullPointerException e) {
+            loginError = "Username or Password is incorrect.<br />";
+            return "redirect:/action=login";
+        }
+    }
+
+//    Criteria criteria = session.createCriteria(YourClass.class);
+//    YourObject yourObject = criteria.add(Restrictions.eq("yourField", yourFieldValue))
+//            .uniqueResult();
+
+
+    @RequestMapping("/dashboard/admin")
+    public String adminPage(@CookieValue(value = "userId", defaultValue = "null") String userId,
+                            Model model) {
+        if (userId.equals("null")) {
+            return "welcome";
+        }
+
+        model.addAttribute("userId", userId);
+
+        return "adminDashboard";
+    }
+
     @RequestMapping("/dashboard/admin/newChild")
-    public String registerUser(@RequestParam("id") int famId,
-                               Model model) {
+    public String registerNewChild(@RequestParam("id") int famId,
+                                   Model model,
+                                   @CookieValue(value = "userId", defaultValue = "null") String userId) {
         model.addAttribute("famId", famId);
         return "newUser";
     }
@@ -167,8 +246,13 @@ public class HomeController {
         return newFamily;
     }
 
-    private UsersEntity newUser(String fName, String lName, String email, int usergroup, String password, int familyid) {
-        Configuration configurationObject = new Configuration().configure("Hibernate.cfg.xml");
+    private UsersEntity newUser(String fName,
+                                String lName,
+                                String email,
+                                int usergroup,
+                                String password,
+                                int familyid) {
+        Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configurationObject.buildSessionFactory();
         Session adminSession = sessionFactory.openSession();
         Transaction userTransaction = adminSession.beginTransaction();

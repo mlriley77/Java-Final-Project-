@@ -8,13 +8,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Spring Demo</title>
+    <title>Check-In - Home</title>
 </head>
 <body>
-
-<a href="${pageContext.request.contextPath}/register/family">Register A New Family Account</a>
-<a href="${pageContext.request.contextPath}/register/user">Register A New User Account</a>
-${hello}
+<h1>Check-In</h1>
+-nav bar goes here-
+<h2>Hello, and welcome to check-In!</h2>
+${homeNav}<br />
+Check-In is a....<br />
 
 ${jsonString}
 
