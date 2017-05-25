@@ -8,25 +8,25 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.web.servlet.ModelAndView;
-//import sun.jvm.hotspot.code.Location;
 
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+//import sun.jvm.hotspot.code.Location;
 
 /**
  * Created by MichaelRiley on 5/21/17.
@@ -36,6 +36,18 @@ import java.util.logging.Logger;
 @Controller
 public class HomeController {
     private String errorMsg = "";
+    private String loggedInMenu =
+            "<ul>\n" +
+                    "<li><a href=\"/\">Home</a></li>" +
+                    "<li><a href=\"/dashboard\">Dashboard</a></li>" +
+                    "<li><a href=\"/action=logout\">Logout</a></li>" +
+                    "</ul>\n";
+    private String loggedOutMenu=
+            "<ul>\n" +
+                    "<li><a href=\"/action=login\">Login</a></li>" +
+                    "<li><a href=\"/action=register/user\">Join A Family</a></li>" +
+                    "<li><a href=\"/action=register/family\">Create A Family</a></li>" +
+                    "</ul>\n";
 
     private static final String ApiUrl = "https://api.hippoapi.com/v3/more/json";
     /*
@@ -107,15 +119,9 @@ public class HomeController {
     public String helloWorld(@CookieValue(value = "userId", defaultValue = "null") String userId,
                              Model model) {
         if (userId.equals("null")) {
-            model.addAttribute("homeNav",
-                    "You Are Not Logged In!<br /><a href='http://localhost:8080/action=login'>Login</a><br /> "
-                            + "<a href='http://localhost:8080/action=register/family'>Create A Family</a><br /> "
-                            + "<a href='http://localhost:8080/action=register/user'>Join A Family</a>");
+            model.addAttribute("navbar", loggedOutMenu);
         } else {
-            model.addAttribute("homeNav",
-                    "You Are Logged In!<br /><a href='http://localhost:8080/action=register/user'>Add A Family Member</a><br /> "
-                            + "<a href='http://localhost:8080/action=logout'>Logout</a>");
-            //should also load user info at some point. need Load
+            model.addAttribute("navbar", loggedInMenu);
         }
 
         return "welcome";
@@ -124,6 +130,7 @@ public class HomeController {
     @RequestMapping(value = "/action=logout")
     public String logOut(Model model,
                          HttpServletResponse response) {
+        model.addAttribute("navbar", loggedOutMenu);
 
         Cookie userId = new Cookie("userId", "null");
         userId.setPath("/");
@@ -135,6 +142,8 @@ public class HomeController {
 
     @RequestMapping(value = "/action=register/family", method = RequestMethod.GET)
     public String registerFamily(Model model) {
+        model.addAttribute("navbar", loggedOutMenu);
+
         model.addAttribute("err", errorMsg);
         return "newFamily";
     }
@@ -143,6 +152,7 @@ public class HomeController {
     public String registerUser(Model model,
                                HttpServletResponse response) {
 
+        model.addAttribute("navbar", loggedOutMenu);
         Cookie userId = new Cookie("userId", "null");
         userId.setPath("/");
         userId.setMaxAge(0);
@@ -194,18 +204,44 @@ public class HomeController {
 
     @RequestMapping(value = "/action=login", method = RequestMethod.GET)
     public String logIn(Model model) {
+        model.addAttribute("navbar", loggedOutMenu);
         model.addAttribute("err", errorMsg);
         return "login";
     }
 
 
     @RequestMapping("/cdash")
-    public ModelAndView childDashboard() {
+    public ModelAndView childDashboard(@CookieValue(value = "userId", defaultValue = "null") String userId,
+                                       Model model) {
         return new ModelAndView("childDashboard");
     }
 
+    @RequestMapping("/dashboard")
+    public String dashboardPage(@CookieValue(value = "userId", defaultValue = "null") String userId,
+                                Model model) {
+        Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configurationObject.buildSessionFactory();
+        Session adminSession = sessionFactory.openSession();
+        Transaction myTransaction = adminSession.beginTransaction();
 
-    @RequestMapping(value = "/dashboard", method = RequestMethod.POST)
+        Criteria criteria = adminSession.createCriteria(UsersEntity.class);
+        try {
+            UsersEntity loggedInUser = (UsersEntity) criteria.add(Restrictions.eq("userid", Integer.parseInt(userId)))
+                    .uniqueResult();
+            model.addAttribute("navbar", loggedInMenu);
+            if (loggedInUser.getUsergroup() == 0) {
+                return "adminDashboard";
+            } else if (loggedInUser.getUsergroup() == 1) {
+                return "childDashboard";
+            } else {
+                return "redirect:/";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/action=login";
+        }
+    }
+
+    @RequestMapping(value = "/dashboardentry", method = RequestMethod.POST)
     public String loggedIn(@RequestParam(value = "email", required = false) String email,
                            @RequestParam(value = "password", required = false) String password,
                            HttpServletResponse response,
@@ -230,10 +266,11 @@ public class HomeController {
                     userId.setMaxAge(-1);
                     response.addCookie(userId);
                     errorMsg = "";
-                    return "adminDashboard";
+                    model.addAttribute("navbar", loggedInMenu);
+                    return "redirect:/dashboard";
                 }
             } catch (NullPointerException e) {
-                errorMsg = "Password returns null";
+                errorMsg = "Username or Password is incorrect.<br />";
                 return "redirect:/action=login";
             }
 
@@ -245,29 +282,8 @@ public class HomeController {
 
 
 
-        @RequestMapping("/dashboard/admin")
-    public String adminPage(@CookieValue(value = "userId", defaultValue = "null") String userId,
-                            Model model) {
-        if (userId.equals("null")) {
-            return "welcome";
-        }
 
-        model.addAttribute("userId", userId);
-
-        return "adminDashboard";
-    }
-
-
-
-
-
-
-
-
-
-
-
-
+    // Sarah is still working on this
     @RequestMapping(value = "/dashboard/admin/newAccount", method = RequestMethod.POST)
     public String newAdmin(@RequestParam("famName") String famName,
                            @RequestParam("fName") String fName,
@@ -284,6 +300,13 @@ public class HomeController {
 
         return "adminDashboard";
     }
+
+
+
+
+
+
+
 
     private FamiliesEntity newFamily(String famName) {
         Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");

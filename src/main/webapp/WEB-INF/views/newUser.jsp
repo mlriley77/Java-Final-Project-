@@ -9,8 +9,12 @@
 <html>
 <head>
     <title>CheckIn - Register New User</title>
+    <link rel="stylesheet" href="/resources/styles.css" />
 </head>
 <body>
+<h1>Check-In</h1>
+${navbar}
+<h2>Create A New Account</h2>
 <form action="${pageContext.request.contextPath}/dashboard/newuser" method="post">
     ${err}
     <h1>Family Unit</h1>

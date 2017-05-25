@@ -9,13 +9,13 @@
 <html>
 <head>
     <title>Check-In - Login</title>
+    <link rel="stylesheet" href="/resources/styles.css" />
 </head>
 <body>
 <h1>Check-In</h1>
--nav bar goes here-
 ${navbar}
 <h2>Please login.</h2>
-<form action="${pageContext.request.contextPath}/dashboard" method="post">
+<form action="${pageContext.request.contextPath}/dashboardentry" method="post">
     Email: <input title="Email" type="text"
                      id="email" name="email"
                      onclick="" /><br />

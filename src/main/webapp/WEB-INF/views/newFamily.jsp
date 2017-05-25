@@ -10,12 +10,12 @@
 <html>
 <head>
     <title>CheckIn - Register New Nest</title>
+    <link rel="stylesheet" href="/resources/styles.css" />
 </head>
 <body>
-
-
-
-Register a new family!
+<h1>Check-In</h1>
+${navbar}
+<h2>Register a new family!</h2>
 <form id="newFamily" action= "${pageContext.request.contextPath}/dashboard/admin/newAccount"  method="post">
     <h1>Family Unit</h1>
     Family Name: <input title="Family Name" type="text"

@@ -9,13 +9,13 @@
 <html>
 <head>
     <title>Check-In - Home</title>
+    <link rel="stylesheet" href="/resources/styles.css" />
 </head>
 
 <body>
 <h1>Check-In</h1>
--nav bar goes here-
+${navbar}
 <h2>Hello, and welcome to check-In!</h2>
-${homeNav}<br />
 Check-In is a....<br />
 
 ${jsonString}
