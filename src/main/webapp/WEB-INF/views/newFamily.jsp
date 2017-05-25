@@ -87,13 +87,6 @@ Register a new family!
 
     }
 
-
-
-
-
-
-
-
 </script>
 
 <script src="//code.jquery.com/jquery-2.2.1.js"></script>

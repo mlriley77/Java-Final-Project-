@@ -49,10 +49,23 @@
 
 <ul>
     <li><a href="adminDashboard.jsp">Parent Console</a></li>
-    <li><a class="active" href="childConsole.jsp">Child Console</a></li>
+    <li><a class="active" href="childDashboard.jsp">Child Console</a></li>
     <li><a href="welcome.jsp">Logout</a></li>
 </ul>
 
+<script>
+    var c = function(pos) {
+        var lat = pos.coords.latitude,
+            long = pos.coords.longitude,
+            coords = lat + ', ' + long;
+        document.getElementById('google_map').setAttribute('src', 'https://maps.google.com/?q=' + coords + '&z=60&output=embed');
+    };
+    var getLocationLink = document.getElementById('get_location');
+    getLocationLink.onclick = function(){
+        navigator.geolocation.getCurrentPosition(c);
+        return false;
+    };
+</script>
 
 </body>
 </html>
