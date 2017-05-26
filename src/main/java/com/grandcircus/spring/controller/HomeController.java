@@ -301,16 +301,6 @@ public class HomeController {
         }
     }
 
-
-    @RequestMapping(value = "/checkIn", method = RequestMethod.POST)
-    public String checkin(@RequestParam(value = "lat") String latitutde,
-                           @RequestParam(value = "long") String longitude,
-                           Model model) {
-        System.out.println(latitutde + ", " + longitude);
-        model.addAttribute("thisorthat", "thisandthat");
-        return "childDashboard";
-    }
-
     @RequestMapping(value = "/dashboard/newfamily", method = RequestMethod.POST)
     public String newAdmin(@RequestParam("famName") String famName,
                            @RequestParam("fName") String fName,
@@ -319,21 +309,28 @@ public class HomeController {
                            @RequestParam("password") String password,
                            Model model) {
 
+        Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configurationObject.buildSessionFactory();
+        Session adminSession = sessionFactory.openSession();
+        Transaction myTransaction = adminSession.beginTransaction();
+
+        Criteria usersCriteria = adminSession.createCriteria(UsersEntity.class);
+
         FamiliesEntity family = newFamily(famName);
-        UsersEntity user = newUser(fName, lName, email, 0, password, family.getFamilyid());
 
-        model.addAttribute("family", family);
-        model.addAttribute("user", user);
-
-        return "adminDashboard";
+        try {
+            UsersEntity newUser = (UsersEntity) usersCriteria.add(Restrictions.eq("email", email))
+                    .uniqueResult();
+            String doesThisExist = newUser.getEmail();
+            errorMsg = "This email is already associated with an account.";
+            return "redirect:/action=register/family";
+        } catch (NullPointerException e) {
+            UsersEntity user = newUser(fName, lName, email, 0, password, family.getFamilyid());
+            model.addAttribute("family", family);
+            model.addAttribute("user", user);
+            return "redirect:/action=login";
+        }
     }
-
-
-
-
-
-
-
 
     private FamiliesEntity newFamily(String famName) {
         Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
