@@ -32,19 +32,6 @@ import java.util.logging.Logger;
 @Controller
 public class HomeController {
     private String errorMsg = "";
-    private String loggedInMenu =
-            "<ul>\n" +
-                    "<li><a href=\"/\">Home</a></li>" +
-                    "<li><a href=\"/dashboard\">Dashboard</a></li>" +
-                    "<li><a href=\"/action=logout\">Logout</a></li>" +
-                    "</ul>\n";
-    private String loggedOutMenu=
-            "<ul>\n" +
-                    "<li><a href=\"/\">Home</a></li>" +
-                    "<li><a href=\"/action=login\">Login</a></li>" +
-                    "<li><a href=\"/action=register/user\">Join A Family</a></li>" +
-                    "<li><a href=\"/action=register/family\">Create A Family</a></li>" +
-                    "</ul>\n";
 
     private static final String ApiUrl = "https://api.hippoapi.com/v3/more/json";
     /*
@@ -109,7 +96,6 @@ public class HomeController {
     @RequestMapping(value = "/action=logout")
     public String logOut(Model model,
                          HttpServletResponse response) {
-        model.addAttribute("navbar", loggedOutMenu);
 
         Cookie userId = new Cookie("userId", "null");
         userId.setPath("/");
@@ -121,8 +107,6 @@ public class HomeController {
 
     @RequestMapping(value = "/action=register/family", method = RequestMethod.GET)
     public String registerFamily(Model model) {
-        model.addAttribute("navbar", loggedOutMenu);
-
         model.addAttribute("err", errorMsg);
         return "newFamily";
     }
@@ -130,8 +114,6 @@ public class HomeController {
     @RequestMapping(value = "/action=register/user", method = RequestMethod.GET)
     public String registerUser(Model model,
                                HttpServletResponse response) {
-
-        model.addAttribute("navbar", loggedOutMenu);
         Cookie userId = new Cookie("userId", "null");
         userId.setPath("/");
         userId.setMaxAge(0);
@@ -183,7 +165,6 @@ public class HomeController {
 
     @RequestMapping(value = "/action=login", method = RequestMethod.GET)
     public String logIn(Model model) {
-        model.addAttribute("navbar", loggedOutMenu);
         model.addAttribute("err", errorMsg);
         return "login";
     }
@@ -200,7 +181,6 @@ public class HomeController {
         try {
             UsersEntity loggedInUser = (UsersEntity) criteria.add(Restrictions.eq("userid", Integer.parseInt(userId)))
                     .uniqueResult();
-            model.addAttribute("navbar", loggedInMenu);
             if (loggedInUser.getUsergroup() == 0) {
                 int famId = loggedInUser.getFamilyid();
                 Criteria kidCriteria = adminSession.createCriteria(FamiliesEntity.class);
@@ -273,7 +253,6 @@ public class HomeController {
                     userId.setMaxAge(-1);
                     response.addCookie(userId);
                     errorMsg = "";
-                    model.addAttribute("navbar", loggedInMenu);
                     return "redirect:/dashboard";
                 }
             } catch (NullPointerException e) {
@@ -352,6 +331,29 @@ public class HomeController {
         userTransaction.commit();
 
         return user;
+    }
+
+    @ModelAttribute("navbar")
+    public String loadNavBar(@CookieValue(value = "userId", defaultValue = "null") String userId) {
+        String loggedInMenu =
+                "<ul>\n" +
+                        "<li><a href=\"/\">Home</a></li>" +
+                        "<li><a href=\"/dashboard\">Dashboard</a></li>" +
+                        "<li><a href=\"/action=logout\">Logout</a></li>" +
+                        "</ul>\n";
+        String loggedOutMenu=
+                "<ul>\n" +
+                        "<li><a href=\"/\">Home</a></li>" +
+                        "<li><a href=\"/action=login\">Login</a></li>" +
+                        "<li><a href=\"/action=register/user\">Join A Family</a></li>" +
+                        "<li><a href=\"/action=register/family\">Create A Family</a></li>" +
+                        "</ul>\n";
+
+        if (userId.equals("null")) {
+            return loggedOutMenu;
+        } else {
+            return loggedInMenu;
+        }
     }
 }
 
