@@ -40,6 +40,7 @@ public class HomeController {
                     "</ul>\n";
     private String loggedOutMenu=
             "<ul>\n" +
+                    "<li><a href=\"/\">Home</a></li>" +
                     "<li><a href=\"/action=login\">Login</a></li>" +
                     "<li><a href=\"/action=register/user\">Join A Family</a></li>" +
                     "<li><a href=\"/action=register/family\">Create A Family</a></li>" +
@@ -58,16 +59,6 @@ public class HomeController {
 
     @RequestMapping(value = "getemail2", method = RequestMethod.GET, produces="application/text")
     public @ResponseBody String getEmail2(@RequestParam("email") String email) {
-        /**
-         * The main program entry point
-         * @param args the command line arguments
-         * @throws IOException If the server does not return a success response
-         */
-
-//        System.out.println("Input email address to verify");
-//        // Create a scanner to read in the requested email address
-//        Scanner in = new Scanner(System.in);
-//        String readLine = in.next();
         String result = null;
         System.out.println("getemail2");
         try {
@@ -112,12 +103,6 @@ public class HomeController {
     @RequestMapping("/")
     public String helloWorld(@CookieValue(value = "userId", defaultValue = "null") String userId,
                              Model model) {
-        if (userId.equals("null")) {
-            model.addAttribute("navbar", loggedOutMenu);
-        } else {
-            model.addAttribute("navbar", loggedInMenu);
-        }
-
         return "welcome";
     }
 
@@ -189,8 +174,9 @@ public class HomeController {
             errorMsg = "This email is already associated with an account.";
             return "redirect:/action=register/user";
         } catch (NullPointerException e) {
-            UsersEntity user = newUser(fName, lName, email, 1, password, famId);
+            UsersEntity user = newUser(fName, lName, email, password, 1, famId);
             model.addAttribute("user", user);
+            errorMsg = "";
             return "redirect:/action=login";
         }
     }
@@ -218,7 +204,8 @@ public class HomeController {
             if (loggedInUser.getUsergroup() == 0) {
                 int famId = loggedInUser.getFamilyid();
                 Criteria kidCriteria = adminSession.createCriteria(FamiliesEntity.class);
-                FamiliesEntity thisFam = (FamiliesEntity) kidCriteria.add(Restrictions.eq("familyid", famId))
+                FamiliesEntity thisFam = (FamiliesEntity) kidCriteria.add(Restrictions
+                        .eq("familyid", famId))
                         .uniqueResult();
                 model.addAttribute("family", thisFam);
                 return "adminDashboard";
@@ -314,7 +301,6 @@ public class HomeController {
         Transaction myTransaction = adminSession.beginTransaction();
 
         Criteria usersCriteria = adminSession.createCriteria(UsersEntity.class);
-
         FamiliesEntity family = newFamily(famName);
 
         try {
@@ -324,7 +310,7 @@ public class HomeController {
             errorMsg = "This email is already associated with an account.";
             return "redirect:/action=register/family";
         } catch (NullPointerException e) {
-            UsersEntity user = newUser(fName, lName, email, 0, password, family.getFamilyid());
+            UsersEntity user = newUser(fName, lName, email, password, 0, family.getFamilyid());
             model.addAttribute("family", family);
             model.addAttribute("user", user);
             return "redirect:/action=login";
@@ -345,13 +331,10 @@ public class HomeController {
         return newFamily;
     }
 
-    private UsersEntity newUser(String fName,
-                                String lName,
-                                String email,
-                                int usergroup,
-                                String password,
-                                int familyid) {
-
+    private UsersEntity newUser(String fName, String lName,
+                                String email, String password,
+                                int usergroup, int familyid)
+    {
         Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configurationObject.buildSessionFactory();
         Session adminSession = sessionFactory.openSession();
