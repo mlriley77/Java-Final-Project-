@@ -302,6 +302,14 @@ public class HomeController {
     }
 
 
+    @RequestMapping(value = "/checkIn", method = RequestMethod.POST)
+    public String checkin(@RequestParam(value = "lat") String latitutde,
+                           @RequestParam(value = "long") String longitude,
+                           Model model) {
+        System.out.println(latitutde + ", " + longitude);
+        model.addAttribute("thisorthat", "thisandthat");
+        return "childDashboard";
+    }
 
     @RequestMapping(value = "/dashboard/newfamily", method = RequestMethod.POST)
     public String newAdmin(@RequestParam("famName") String famName,

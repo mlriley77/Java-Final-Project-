@@ -22,6 +22,19 @@ ${navbar}
                 frameborder="0" scrolling="no"
                 marginheight="0" marginwidth="0" src="https://maps.google.com/?q=${family.lastlat}, ${family.lastlong}&z=25&output=embed"></iframe>
     </div>
+    <script>
+        var c = function(pos) {
+            var lat = pos.coords.latitude,
+                long = pos.coords.longitude,
+                coords = lat + ', ' + long;
+            document.getElementById('google_map').setAttribute('src', 'https://maps.google.com/?q=' + coords + '&z=60&output=embed');
+        };
+        var getLocationLink = document.getElementById('get_location');
+        getLocationLink.onclick = function(){
+            navigator.geolocation.getCurrentPosition(c);
+            return false;
+        };
+    </script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDHLLLdbLtD8-GFY-wHJTzy08_q-4M_oGM">
     </script>
