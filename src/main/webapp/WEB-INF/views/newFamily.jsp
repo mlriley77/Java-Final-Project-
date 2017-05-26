@@ -38,11 +38,11 @@ ${navbar}
     Password: <input title="Password" type="password"
                      id="password" name="password" required
                      onclick=""
-                     value=""/><br />
+                     value="" /><br />
     Confirm Password: <input title="Confirm Password" type="password"
                              id="confPassword" name="confPassword"
                              onclick=""
-                             value="" onchange="formValidation()"/><br />
+                             value="" onchange="email2()"/><br />
     <input type="submit"  onsubmit="formValidation()" value="Register" />
 
 </form>
@@ -50,28 +50,29 @@ ${navbar}
 
 <script>
     function formValidation() {
-        var password = document.getElementById("password").value;
-        var confPassword = document.getElementById("confPassword").value;
+
         var famName = document.getElementById("famName").value;
         var email = document.getElementById("email").value;
         var emailVal = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-        if (emailVal.test(email))
-        {
+        if (emailVal.test(email)) {
             return (true)
         }
         alert("You have entered an invalid email address!");
         return (false);
-
-        if (password !== confPassword) {
-            document.getElementById("password").style.borderColor = "#e34234";
-            document.getElementById("confPassword").style.borderColor = "#E34234";
-            alert("Passwords Do not match");
-        }
-        else {
-            alert("Passwords Match!!!");
-        }
     }
+    function email2() {
+        var password = document.getElementById("password").value;
+        var confPassword = document.getElementById("confPassword").value;
+            if (password !== confPassword) {
+                document.getElementById("password").style.borderColor = "#e34234";
+                document.getElementById("confPassword").style.borderColor = "#E34234";
+                alert("Passwords Do not match");
+            }
+            else {
+                alert("Passwords Match!!!");
+            }
+        }
     function emailValidation(element) {
         var email = element.value;
         //console.log(element.value);
