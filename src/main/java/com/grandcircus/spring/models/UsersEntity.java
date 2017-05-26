@@ -11,8 +11,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users", schema = "checkin", catalog = "")
 public class UsersEntity {
-    @Id
-    @GeneratedValue
     private int userid;
     private int usergroup;
     private String email;
@@ -100,11 +98,11 @@ public class UsersEntity {
 
         if (userid != that.userid) return false;
         if (usergroup != that.usergroup) return false;
+        if (familyid != that.familyid) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (fname != null ? !fname.equals(that.fname) : that.fname != null) return false;
         if (lname != null ? !lname.equals(that.lname) : that.lname != null) return false;
-        if (familyid != that.familyid) return false;
 
         return true;
     }
@@ -120,15 +118,4 @@ public class UsersEntity {
         result = 31 * result + familyid;
         return result;
     }
-
-//    @ManyToOne
-//    @JoinColumn(table="families",name="familyId")
-////    @JoinColumn(name = "familyid", referencedColumnName = "familyid", nullable = false)
-//    public FamiliesEntity getFamiliesByFamilyid() {
-//        return familiesByFamilyid;
-//    }
-//
-//    public void setFamiliesByFamilyid(FamiliesEntity familiesByFamilyid) {
-//        this.familiesByFamilyid = familiesByFamilyid;
-//    }
 }

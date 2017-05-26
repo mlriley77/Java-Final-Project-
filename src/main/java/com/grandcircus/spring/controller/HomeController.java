@@ -26,12 +26,9 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//import sun.jvm.hotspot.code.Location;
-
 /**
  * Created by MichaelRiley on 5/21/17.
  */
-
 
 @Controller
 public class HomeController {
@@ -59,8 +56,6 @@ public class HomeController {
     private static final String QueryFormatString = "%1$s/%2$s/%3$s";
 
     private static final String YourAPIKey = "D4DABD4A"; //Your API Key
-
-
 
     @RequestMapping(value = "getemail2", method = RequestMethod.GET, produces="application/text")
     public @ResponseBody String getEmail2(@RequestParam("email") String email) {
@@ -201,19 +196,11 @@ public class HomeController {
         }
     }
 
-
     @RequestMapping(value = "/action=login", method = RequestMethod.GET)
     public String logIn(Model model) {
         model.addAttribute("navbar", loggedOutMenu);
         model.addAttribute("err", errorMsg);
         return "login";
-    }
-
-
-    @RequestMapping("/cdash")
-    public ModelAndView childDashboard(@CookieValue(value = "userId", defaultValue = "null") String userId,
-                                       Model model) {
-        return new ModelAndView("childDashboard");
     }
 
     @RequestMapping("/dashboard")
@@ -230,8 +217,18 @@ public class HomeController {
                     .uniqueResult();
             model.addAttribute("navbar", loggedInMenu);
             if (loggedInUser.getUsergroup() == 0) {
+                int famId = loggedInUser.getFamilyid();
+                Criteria kidCriteria = adminSession.createCriteria(FamiliesEntity.class);
+                FamiliesEntity thisFam = (FamiliesEntity) kidCriteria.add(Restrictions.eq("familyid", famId))
+                        .uniqueResult();
+                model.addAttribute("family", thisFam);
                 return "adminDashboard";
             } else if (loggedInUser.getUsergroup() == 1) {
+                int kidFamId = loggedInUser.getFamilyid();
+                Criteria kidCriteria = adminSession.createCriteria(FamiliesEntity.class);
+                FamiliesEntity thisFam = (FamiliesEntity) kidCriteria.add(Restrictions.eq("familyid", kidFamId))
+                        .uniqueResult();
+                model.addAttribute("family", thisFam);
                 return "childDashboard";
             } else {
                 return "redirect:/";
@@ -239,6 +236,30 @@ public class HomeController {
         } catch (NumberFormatException e) {
             return "redirect:/action=login";
         }
+    }
+
+    @RequestMapping(value = "/submitcoords", method = RequestMethod.POST)
+    public String postcoords(Model mode,
+                             @RequestParam("long") String thisLong,
+                             @RequestParam("lat") String thisLat,
+                             @RequestParam("famid") String famid){
+        Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configurationObject.buildSessionFactory();
+        Session adminSession = sessionFactory.openSession();
+        Transaction myTransaction = adminSession.beginTransaction();
+
+        Criteria criteria = adminSession.createCriteria(FamiliesEntity.class);
+        FamiliesEntity familyresult = (FamiliesEntity) criteria.add(Restrictions
+                .eq("familyid", Integer.parseInt(famid)))
+                .uniqueResult();
+
+        familyresult.setLastlat(thisLat);
+        familyresult.setLastlong(thisLong);
+
+        adminSession.save(familyresult);
+        myTransaction.commit();
+
+        return "redirect:/dashboard";
     }
 
     @RequestMapping(value = "/dashboardentry", method = RequestMethod.POST)
@@ -282,9 +303,7 @@ public class HomeController {
 
 
 
-
-    // Sarah is still working on this
-    @RequestMapping(value = "/dashboard/admin/newAccount", method = RequestMethod.POST)
+    @RequestMapping(value = "/dashboard/newfamily", method = RequestMethod.POST)
     public String newAdmin(@RequestParam("famName") String famName,
                            @RequestParam("fName") String fName,
                            @RequestParam("lName") String lName,
@@ -322,7 +341,6 @@ public class HomeController {
         return newFamily;
     }
 
-
     private UsersEntity newUser(String fName,
                                 String lName,
                                 String email,
@@ -348,24 +366,6 @@ public class HomeController {
 
         return user;
     }
-
-//    private LocationsEntity pushMaplatitude (String latitude){
-//        Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
-//        SessionFactory sessionFactory = configurationObject.buildSessionFactory();
-//        Session map = sessionFactory.openSession();
-//
-//        Transaction mapTransaction = map.beginTransaction();
-//        LocationsEntity latlocation = new LocationsEntity();
-//
-//        latlocation.setLatitude(latitude);
-//
-//
-//
-//        mapTransaction.commit();
-//        return latlocation;
-//    }
-
-
 }
 
 

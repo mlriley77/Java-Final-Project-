@@ -75,8 +75,7 @@ ${navbar}
         $.get(url, {email:email} ,function(data){
             console.log(data);
             //process response
-            $("#emailerror").empty();
-            $("#emailerror").append(data);
+            $("#emailerror").empty().append(data);
         });
     }
 </script>
