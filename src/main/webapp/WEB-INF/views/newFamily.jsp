@@ -16,7 +16,7 @@
 <h1>Check-In</h1>
 ${navbar}
 <h2>Register a new family!</h2>
-<form id="newFamily" action= "${pageContext.request.contextPath}/dashboard/newfamily" method="post">
+<form id="newFamily" action= "${pageContext.request.contextPath}/action=register/family/submit" method="post">
     <h1>Family Unit</h1>
     Family Name: <input title="Family Name" type="text"
                         id="famName" name="famName" required

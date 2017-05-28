@@ -15,18 +15,17 @@
 <h1>Check-In</h1>
 ${navbar}
 <h2>Dashboard</h2>
-<form action="/submitcoords" method="post">
+<form action="${pageContext.request.contextPath}/action=submitlocation" method="post">
     <input type="submit" value="Check In" />
     <input type="hidden" name="lat" id="lat" />
     <input type="hidden" name="long" id="long" />
-    <input type="hidden" name="famid" id="famid" value="${family.familyid}"/>
+    <input type="hidden" name="userId" id="userId" value="${user.userid}"/>
 </form>
 <script>
     window.onload = function() {
-        var c = function (pos) {
+        var c = function(pos) {
             var lat = pos.coords.latitude,
-                long = pos.coords.longitude,
-                coords = lat + ', ' + long;
+                long = pos.coords.longitude;
             document.getElementById('lat').value = lat;
             document.getElementById('long').value = long;
         };

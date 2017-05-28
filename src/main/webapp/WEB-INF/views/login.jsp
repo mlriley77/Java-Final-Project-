@@ -15,7 +15,7 @@
 <h1>Check-In</h1>
 ${navbar}
 <h2>Please login.</h2>
-<form action="${pageContext.request.contextPath}/dashboardentry" method="post">
+<form action="${pageContext.request.contextPath}/action=login/submit" method="post">
     Email: <input title="Email" type="text"
                      id="email" name="email"
                      onclick="" /><br />

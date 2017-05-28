@@ -15,13 +15,13 @@
 <h1>Check-In</h1>
 ${navbar}
 <h2>Create A New Account</h2>
-<form action="${pageContext.request.contextPath}/dashboard/newuser" method="post">
+<form action="${pageContext.request.contextPath}/action=register/user/submit" method="post">
     ${err}
     <h1>Family Unit</h1>
     Family Id: <input title="Family Id Number" type="text"
                       id="famId" name="famId"
                       onclick="" /><br />
-    <h1>Leader Account</h1>
+    <h1>Child Account</h1>
     First Name: <input title="First Name" type="text"
                        id="fName" name="fName" required
                        onclick=""
@@ -65,7 +65,6 @@ ${navbar}
             alert("Passwords Do not match");
         }
         else {
-            alert("Passwords Match!!!");
         }
     }
     function emailValidation(element) {
