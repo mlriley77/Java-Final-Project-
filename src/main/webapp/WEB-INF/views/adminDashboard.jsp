@@ -17,6 +17,12 @@
 <h1>Check-In</h1>
 ${navbar}
 <h2>Dashboard</h2>
+<form action="${pageContext.request.contextPath}/action=submitlocation" method="post">
+    <input type="submit" value="Check In" />
+    <input type="hidden" name="lat" id="lat" />
+    <input type="hidden" name="long" id="long" />
+    <input type="hidden" name="userId" id="userId" value="${user.userid}"/>
+</form>
 <c:forEach items="${children}" var="child">
     <div style="width:28%;display: inline-block;">
         <b>${child.fname} last checked in at ${child.lasttime}</b>
@@ -28,6 +34,18 @@ ${navbar}
         </div>
     </div>
 </c:forEach>
+<script>
+    window.onload = function() {
+        var c = function(pos) {
+            var lat = pos.coords.latitude,
+                long = pos.coords.longitude;
+            document.getElementById('lat').value = lat;
+            document.getElementById('long').value = long;
+        };
+        navigator.geolocation.getCurrentPosition(c);
+        return false;
+    }
+</script>
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDHLLLdbLtD8-GFY-wHJTzy08_q-4M_oGM">
 </script>

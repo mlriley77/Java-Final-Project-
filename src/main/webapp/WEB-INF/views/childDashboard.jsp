@@ -21,6 +21,13 @@ ${navbar}
     <input type="hidden" name="long" id="long" />
     <input type="hidden" name="userId" id="userId" value="${user.userid}"/>
 </form>
+<b>${parent.fname} last checked in at ${parent.lasttime}</b>
+<div id="map">
+    <iframe id="google_map"
+            width="425" height="350"
+            frameborder="0" scrolling="no"
+            marginheight="0" marginwidth="0" src="https://maps.google.com/?q=${parent.lastlat}, ${parent.lastlong}&z=15&output=embed"></iframe>
+</div>
 <script>
     window.onload = function() {
         var c = function(pos) {
