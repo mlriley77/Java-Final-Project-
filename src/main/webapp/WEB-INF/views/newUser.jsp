@@ -22,50 +22,56 @@ ${navbar}
                       id="famId" name="famId"
                       onclick="" /><br />
     <h1>Child Account</h1>
-    First Name: <input title="First Name" type="text"
-                       id="fName" name="fName" required
-                       onclick=""
-                       value="" /><br />
-    Last Name: <input title="Last Name" type="text"
-                      id="lName" name="lName" required
+        First Name: <input title="First Name" type="text"
+                           id="fName" name="fName" required
+                           onclick=""
+                           value="" /><br />
+        Last Name: <input title="Last Name" type="text"
+                          id="lName" name="lName" required
+                          onclick=""
+                          value="" /><br />
+        Email: <input title="Email" type="text"
+                      id="email" name="email" required
                       onclick=""
-                      value="" /><br />
-    Email: <input title="Email" type="text"
-                  id="email" name="email" required
-                  onclick=""
-                  value="" onchange="emailValidation(this)"/> <div id="emailerror"> </div><br>
-    Password: <input title="Password" type="password"
-                     id="password" name="password"
-                     onclick="" /><br />
-    Confirm Password: <input title="Confirm Password" type="password"
-                             id="confPassword" name="confPassword"
-                             onclick="" onchange="email2()"/><br />
-    <input type="submit" value="Register" />
+                      value="" onchange="emailValidation(this)"/> <div id="emailerror"> </div><br>
+        Password: <input title="Password" type="password"
+                         id="password" name="password" required
+                         onclick=""
+                         value="" /><br />
+        Confirm Password: <input title="Confirm Password" type="password"
+                                 id="confPassword" name="confPassword"
+                                 onclick=""
+                                 value="" onchange="email2()"/><br />
+        <input id="formsubmit" type="submit"  onsubmit="formValidation()" value="Register" disabled/>
+
 </form>
+
 
 <script>
     function formValidation() {
 
         var famName = document.getElementById("famName").value;
         var email = document.getElementById("email").value;
-        var emailVal = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-        if (emailVal.test(email)) {
-            return (true)
+
+        if (emailValidation(email) === "Bad"){
+            alert ("Enter a valid email address")
         }
-        alert("You have entered an invalid email address!");
-        return (false);
+
     }
     function email2() {
         var password = document.getElementById("password").value;
         var confPassword = document.getElementById("confPassword").value;
+        var submitButton = document.getElementById("formsubmit");
         if (password !== confPassword) {
             document.getElementById("password").style.borderColor = "#e34234";
             document.getElementById("confPassword").style.borderColor = "#E34234";
             alert("Passwords Do not match");
+        }else {
+            submitButton.disabled = false;
         }
-        else {
-        }
+
+
     }
     function emailValidation(element) {
         var email = element.value;
