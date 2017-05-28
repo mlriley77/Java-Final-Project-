@@ -15,6 +15,7 @@
 <h1>Check-In</h1>
 ${navbar}
 <h2>Dashboard</h2>
+<b>Family Id: </b>${family.familyid}<br />
 <form action="${pageContext.request.contextPath}/action=submitlocation" method="post">
     <input type="submit" value="Check In" />
     <input type="hidden" name="lat" id="lat" />

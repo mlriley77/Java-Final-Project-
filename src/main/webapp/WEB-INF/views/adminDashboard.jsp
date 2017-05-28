@@ -17,6 +17,7 @@
 <h1>Check-In</h1>
 ${navbar}
 <h2>Dashboard</h2>
+<b>Family Id: </b>${family.familyid}<br />
 <form action="${pageContext.request.contextPath}/action=submitlocation" method="post">
     <input type="submit" value="Check In" />
     <input type="hidden" name="lat" id="lat" />
@@ -34,6 +35,7 @@ ${navbar}
         </div>
     </div>
 </c:forEach>
+<a href="https://maps.googleapis.com/maps/api/geocode/xml?latlng=40.714224,-73.961452&key=AIzaSyAlb721ruUDaYfkOEwqHnNS-cNyNXx-0Pw">thisorthat</a>
 <script>
     window.onload = function() {
         var c = function(pos) {
