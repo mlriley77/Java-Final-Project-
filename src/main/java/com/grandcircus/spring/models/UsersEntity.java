@@ -1,8 +1,6 @@
 package com.grandcircus.spring.models;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
-
 /**
  * Class description
  *
@@ -22,8 +20,7 @@ public class UsersEntity {
     private String lastlat;
     private String lastlong;
     private Timestamp lasttime;
-//    private FamiliesEntity familiesByFamilyid;
-
+    //    private FamiliesEntity familiesByFamilyid;
     @Id
     @Column(name = "userid", nullable = false)
     public int getUserid() {
@@ -32,7 +29,6 @@ public class UsersEntity {
     public void setUserid(int userid) {
         this.userid = userid;
     }
-
     @Basic
     @Column(name = "usergroup", nullable = false)
     public int getUsergroup() {
@@ -41,7 +37,6 @@ public class UsersEntity {
     public void setUsergroup(int usergroup) {
         this.usergroup = usergroup;
     }
-
     @Basic
     @Column(name = "email", nullable = false, length = 60)
     public String getEmail() {
@@ -50,7 +45,6 @@ public class UsersEntity {
     public void setEmail(String email) {
         this.email = email;
     }
-
     @Basic
     @Column(name = "password", nullable = false, length = 45)
     public String getPassword() {
@@ -59,7 +53,6 @@ public class UsersEntity {
     public void setPassword(String password) {
         this.password = password;
     }
-
     @Basic
     @Column(name = "fname", nullable = false, length = 45)
     public String getFname() {
@@ -68,7 +61,6 @@ public class UsersEntity {
     public void setFname(String fname) {
         this.fname = fname;
     }
-
     @Basic
     @Column(name = "lname", nullable = false, length = 45)
     public String getLname() {
@@ -77,7 +69,6 @@ public class UsersEntity {
     public void setLname(String lname) {
         this.lname = lname;
     }
-
     @Basic
     @Column(name = "familyid", nullable = false)
     public int getFamilyid() {
@@ -86,7 +77,6 @@ public class UsersEntity {
     public void setFamilyid(int familyid) {
         this.familyid = familyid;
     }
-
     @Basic
     @Column(name = "lastlat", nullable = true, length = 25)
     public String getLastlat() {
@@ -95,7 +85,6 @@ public class UsersEntity {
     public void setLastlat(String lastlat) {
         this.lastlat = lastlat;
     }
-
     @Basic
     @Column(name = "lastlong", nullable = true, length = 25)
     public String getLastlong() {
@@ -104,7 +93,6 @@ public class UsersEntity {
     public void setLastlong(String lastlong) {
         this.lastlong = lastlong;
     }
-
     @Basic
     @Column(name = "lasttime", nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
@@ -114,14 +102,11 @@ public class UsersEntity {
     public void setLasttime(Timestamp lasttime) {
         this.lasttime = lasttime;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         UsersEntity that = (UsersEntity) o;
-
         if (userid != that.userid) return false;
         if (usergroup != that.usergroup) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
@@ -132,10 +117,8 @@ public class UsersEntity {
         if (lastlat != null ? !lastlat.equals(that.lastlat) : that.lastlat != null) return false;
         if (lastlong != null ? !lastlong.equals(that.lastlong) : that.lastlong != null) return false;
         if (lasttime != null ? !lasttime.equals(that.lasttime) : that.lasttime != null) return false;
-
         return true;
     }
-
     @Override
     public int hashCode() {
         int result = userid;
@@ -150,7 +133,6 @@ public class UsersEntity {
         result = 31 * result + (lasttime != null ? lasttime.hashCode() : 0);
         return result;
     }
-
 //    @ManyToOne
 //    @JoinColumn(name = "familyid", referencedColumnName = "familyid", nullable = false)
 //    public FamiliesEntity getFamiliesByFamilyid() {
