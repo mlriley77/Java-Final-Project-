@@ -3,6 +3,7 @@ package com.grandcircus.spring.controller;
 import com.grandcircus.spring.models.FamiliesEntity;
 import com.grandcircus.spring.models.UsersEntity;
 import com.grandcircus.spring.util.Cookies;
+import com.grandcircus.spring.util.DAO;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -98,13 +99,13 @@ public class HomeController {
                            @RequestParam("password") String password) {
         clearErrorMessage();
 
-        FamiliesEntity family = newFamily(famName);
-        if (doesUserExist(email)) {
+        FamiliesEntity family = DAO.newFamily(famName);
+        if (DAO.doesUserExist(email)) {
             errorMsg = "This email is already associated with an account.";
             return "redirect:/action=register/family";
         } else {
             clearErrorMessage();
-            newUser(fName, lName, email, password, 0, family.getFamilyid());
+            DAO.newUser(fName, lName, email, password, 0, family.getFamilyid());
             return "redirect:/action=login";
         }
     }
@@ -123,17 +124,17 @@ public class HomeController {
 
         clearErrorMessage();
 
-        if (!doesFamilyExist(famId)) {
+        if (!DAO.doesFamilyExist(famId)) {
             errorMsg = "This family ID does not exist";
             return "redirect:/action=register/user";
         }
 
-        if (doesUserExist(email)) {
+        if (DAO.doesUserExist(email)) {
             errorMsg = "This email is already associated with an account.";
             return "redirect:/action=register/family";
         } else {
             clearErrorMessage();
-            newUser(fName, lName, email, password, 1, famId);
+            DAO.newUser(fName, lName, email, password, 1, famId);
             return "redirect:/action=login";
         }
     }
@@ -151,12 +152,12 @@ public class HomeController {
         Cookies.deleteUserCookie(response);
 
         // kicks back to login if the email doesn't exist
-        if (!(doesUserExist(email))) {
+        if (!(DAO.doesUserExist(email))) {
             errorMsg = "Your email or password is incorrect";
             return "redirect:/action=login";
         }
 
-        UsersEntity user = getUserByEmail(email);
+        UsersEntity user = DAO.getUserByEmail(email);
 
         // kicks back if the password is incorrect
         if (!(user.getPassword().equals(password))) {
@@ -191,11 +192,11 @@ public class HomeController {
             return "redirect:/action=login";
         }
 
-        UsersEntity thisAccount = loadThisAccount(userId);
+        UsersEntity thisAccount = DAO.loadThisAccount(userId);
 
         if (thisAccount.getUsergroup() == 0) {
-            ArrayList<UsersEntity> childAccounts = loadChildAccounts(thisAccount.getFamilyid());
-            FamiliesEntity family = loadFamily(thisAccount.getFamilyid());
+            ArrayList<UsersEntity> childAccounts = DAO.loadChildAccounts(thisAccount.getFamilyid());
+            FamiliesEntity family = DAO.loadFamily(thisAccount.getFamilyid());
 
             model.addAttribute("user", thisAccount);
             model.addAttribute("children", childAccounts);
@@ -203,8 +204,8 @@ public class HomeController {
 
             return "adminDashboard";
         } else {
-            UsersEntity parent = loadParentAccount(thisAccount.getFamilyid());
-            FamiliesEntity family = loadFamily(thisAccount.getFamilyid());
+            UsersEntity parent = DAO.loadParentAccount(thisAccount.getFamilyid());
+            FamiliesEntity family = DAO.loadFamily(thisAccount.getFamilyid());
 
             model.addAttribute("user", thisAccount);
             model.addAttribute("parent", parent);
@@ -217,144 +218,14 @@ public class HomeController {
     @RequestMapping(value = "/action=submitlocation", method = RequestMethod.POST)
     public String postcoords(@RequestParam("lat") String checkinLat,
                              @RequestParam("long") String checkinLong,
-                             @RequestParam("userId") String userId){
+                             @RequestParam("userId") String userId) {
 
-        updateUserCoordinates(checkinLat, checkinLong, userId);
+        DAO.updateUserCoordinates(checkinLat, checkinLong, userId);
 
         return "redirect:/dashboard";
     }
 
-    //this will be the DAO stuff
-    private static Session loadSession() {
-        Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
-        SessionFactory sessionFactory = configurationObject.buildSessionFactory();
-
-        return sessionFactory.openSession();
-    }
-    private FamiliesEntity newFamily(String famName) {
-        Session browsingSession = loadSession();
-        Transaction databaseTransaction = browsingSession.beginTransaction();
-
-        FamiliesEntity newFamily = new FamiliesEntity();
-        newFamily.setName(famName);
-
-        browsingSession.save(newFamily);
-        databaseTransaction.commit();
-
-        return newFamily;
-    }
-    private static void newUser(String fName, String lName,
-                                String email, String password,
-                                int usergroup, int familyid) {
-        Session browsingSession = loadSession();
-        Transaction databaseTransaction = browsingSession.beginTransaction();
-
-        UsersEntity user = new UsersEntity();
-
-        user.setFname(fName);
-        user.setLname(lName);
-        user.setEmail(email);
-        user.setUsergroup(usergroup);
-        user.setPassword(password);
-        user.setFamilyid(familyid);
-
-        browsingSession.save(user);
-        databaseTransaction.commit();
-    }
-    private static void updateUserCoordinates(String checkinLat,
-                                              String checkinLong,
-                                              String userId) {
-        Session browsingSession = loadSession();
-        Transaction myTransaction = browsingSession.beginTransaction();
-
-        Criteria criteria = browsingSession.createCriteria(UsersEntity.class);
-        UsersEntity personCheckingIn = (UsersEntity) criteria
-                .add(Restrictions.eq("userid", Integer.parseInt(userId)))
-                .uniqueResult();
-
-        personCheckingIn.setLastlat(checkinLat);
-        personCheckingIn.setLastlong(checkinLong);
-        personCheckingIn.setLasttime(getCurrentTime());
-
-        browsingSession.save(personCheckingIn);
-        myTransaction.commit();
-    }
-    private static boolean doesUserExist(String email) {
-        // this will pass if the email exists, or fail if the user does not exist.
-        try {
-            Session browsingSession = loadSession();
-            Criteria usersCriteria = browsingSession.createCriteria(UsersEntity.class);
-
-            UsersEntity newUser = (UsersEntity) usersCriteria
-                    .add(Restrictions.eq("email", email))
-                    .uniqueResult();
-            String doesThisExist = newUser.getEmail();
-
-            return true;
-        } catch (NullPointerException e) {
-            return false;
-        }
-
-    }
-    private static boolean doesFamilyExist(int famId) {
-        try {
-            Session browsingSession = loadSession();
-            Criteria familyCriteria = browsingSession.createCriteria(FamiliesEntity.class);
-
-            FamiliesEntity family = (FamiliesEntity) familyCriteria
-                    .add(Restrictions.eq("familyid", famId))
-                    .uniqueResult();
-            int doesThisExist = family.getFamilyid();
-
-            return true;
-        } catch (NullPointerException e) {
-            return false;
-        }
-    }
-    private static UsersEntity getUserByEmail(String email) {
-        Session browsingSession = loadSession();
-        Criteria userCriteria = browsingSession.createCriteria(UsersEntity.class);
-
-        return (UsersEntity) userCriteria
-                .add(Restrictions.eq("email", email))
-                .uniqueResult();
-    }
-    private static UsersEntity loadThisAccount(String userId) {
-        Session browsingSession = loadSession();
-        Criteria userCriteria = browsingSession.createCriteria(UsersEntity.class);
-
-        return (UsersEntity) userCriteria
-                .add(Restrictions.eq("userid",
-                        Integer.parseInt(userId)))
-                .uniqueResult();
-    }
-    private static ArrayList<UsersEntity> loadChildAccounts(int familyId) {
-        Session browsingSession = loadSession();
-        Criteria childCriteria = browsingSession.createCriteria(UsersEntity.class);
-
-        return (ArrayList<UsersEntity>) childCriteria
-                .add(Restrictions.eq("familyid", familyId))
-                .add(Restrictions.eq("usergroup", 1))
-                .list();
-    }
-    private static FamiliesEntity loadFamily(int familyId) {
-        Session browsingSession = loadSession();
-        Criteria familyCriteria = browsingSession.createCriteria(FamiliesEntity.class);
-
-        return (FamiliesEntity) familyCriteria
-                .add(Restrictions.eq("familyid", familyId))
-                .uniqueResult();
-    }
-    private static UsersEntity loadParentAccount(int familyId) {
-        Session browsingSession = loadSession();
-        Criteria adminCriteria = browsingSession.createCriteria(UsersEntity.class);
-        return (UsersEntity) adminCriteria
-                .add(Restrictions.eq("familyid", familyId))
-                .add(Restrictions.eq("usergroup", 0))
-                .uniqueResult();
-    }
-
-    private static Timestamp getCurrentTime() {
+    public static Timestamp getCurrentTime() {
         Date dateObject = new Date();
         long currentTimeLong = dateObject.getTime();
         return new Timestamp(currentTimeLong);
