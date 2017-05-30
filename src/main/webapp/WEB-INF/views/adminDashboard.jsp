@@ -35,7 +35,6 @@ ${navbar}
         </div>
     </div>
 </c:forEach>
-
 <script>
     window.onload = function() {
         var c = function(pos) {

@@ -4,21 +4,12 @@ import com.grandcircus.spring.models.FamiliesEntity;
 import com.grandcircus.spring.models.UsersEntity;
 import com.grandcircus.spring.util.Cookies;
 import com.grandcircus.spring.util.DAO;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.criterion.Restrictions;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.omg.CORBA.UserException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,9 +17,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -91,6 +80,7 @@ public class HomeController {
         Cookies.deleteUserCookie(response);
         return "newFamily";
     }
+
     @RequestMapping(value = "/action=register/family/submit", method = RequestMethod.POST)
     public String newAdmin(@RequestParam("famName") String famName,
                            @RequestParam("fName") String fName,
@@ -115,6 +105,7 @@ public class HomeController {
         Cookies.deleteUserCookie(response);
         return "newUser";
     }
+
     @RequestMapping(value = "/action=register/user/submit", method = RequestMethod.POST)
     public String newChild(@RequestParam("famId") int famId,
                            @RequestParam("fName") String fName,
@@ -143,6 +134,7 @@ public class HomeController {
     public String logIn() {
         return "login";
     }
+
     @RequestMapping(value = "/action=login/submit", method = RequestMethod.POST)
     public String loggedIn(@RequestParam(value = "email", required = false) String email,
                            @RequestParam(value = "password", required = false) String password,
@@ -173,7 +165,6 @@ public class HomeController {
                 response);
 
         return "redirect:/dashboard";
-
     }
 
     @RequestMapping(value = "/action=logout")
@@ -230,12 +221,15 @@ public class HomeController {
         long currentTimeLong = dateObject.getTime();
         return new Timestamp(currentTimeLong);
     }
+
     private static String errorMsg = "";
+
     private static void clearErrorMessage() {
         errorMsg = "";
     }
+
     @ModelAttribute("err")
-    public String displayErrorMessage() {
+    public String setErrorMessage() {
         return errorMsg;
     }
     @ModelAttribute("navbar")
