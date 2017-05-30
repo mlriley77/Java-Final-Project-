@@ -23,15 +23,11 @@ import java.util.ArrayList;
 @Repository
 @Transactional
 public class DAO {
-    private static Session loadSession() {
-        Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
-        SessionFactory sessionFactory = configurationObject.buildSessionFactory();
-
-        return sessionFactory.openSession();
-    }
+    private static Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
+    private static SessionFactory sessionFactory = configurationObject.buildSessionFactory();
 
     public static FamiliesEntity newFamily(String famName) {
-        Session browsingSession = loadSession();
+        Session browsingSession = sessionFactory.openSession();
         Transaction databaseTransaction = browsingSession.beginTransaction();
 
         FamiliesEntity newFamily = new FamiliesEntity();
@@ -47,7 +43,7 @@ public class DAO {
     public static void newUser(String fName, String lName,
                                String email, String password,
                                int usergroup, int familyid) {
-        Session browsingSession = loadSession();
+        Session browsingSession = sessionFactory.openSession();
         Transaction databaseTransaction = browsingSession.beginTransaction();
         UsersEntity user = new UsersEntity();
 
@@ -66,7 +62,7 @@ public class DAO {
     public static void updateUserCoordinates(String checkinLat,
                                              String checkinLong,
                                              String userId) {
-        Session browsingSession = loadSession();
+        Session browsingSession = sessionFactory.openSession();
         Transaction myTransaction = browsingSession.beginTransaction();
 
         Criteria criteria = browsingSession.createCriteria(UsersEntity.class);
@@ -86,7 +82,7 @@ public class DAO {
     public static boolean doesUserExist(String email) {
         // this will pass if the email exists, or fail if the user does not exist.
         try {
-            Session browsingSession = loadSession();
+            Session browsingSession = sessionFactory.openSession();
             Criteria usersCriteria = browsingSession.createCriteria(UsersEntity.class);
 
             UsersEntity newUser = (UsersEntity) usersCriteria
@@ -103,7 +99,7 @@ public class DAO {
 
     public static boolean doesFamilyExist(int famId) {
         try {
-            Session browsingSession = loadSession();
+            Session browsingSession = sessionFactory.openSession();
             Criteria familyCriteria = browsingSession.createCriteria(FamiliesEntity.class);
 
             FamiliesEntity family = (FamiliesEntity) familyCriteria
@@ -120,7 +116,7 @@ public class DAO {
     }
 
     public static UsersEntity getUserByEmail(String email) {
-        Session browsingSession = loadSession();
+        Session browsingSession = sessionFactory.openSession();
         Criteria userCriteria = browsingSession.createCriteria(UsersEntity.class);
 
         UsersEntity user = (UsersEntity) userCriteria
@@ -133,7 +129,7 @@ public class DAO {
     }
 
     public static UsersEntity loadThisAccount(String userId) {
-        Session browsingSession = loadSession();
+        Session browsingSession = sessionFactory.openSession();
         Criteria userCriteria = browsingSession.createCriteria(UsersEntity.class);
 
         UsersEntity user = (UsersEntity) userCriteria
@@ -147,7 +143,7 @@ public class DAO {
     }
 
     public static ArrayList<UsersEntity> loadChildAccounts(int familyId) {
-        Session browsingSession = loadSession();
+        Session browsingSession = sessionFactory.openSession();
 
         Criteria childCriteria = browsingSession.createCriteria(UsersEntity.class);
 
@@ -162,7 +158,7 @@ public class DAO {
     }
 
     public static FamiliesEntity loadFamily(int familyId) {
-        Session browsingSession = loadSession();
+        Session browsingSession = sessionFactory.openSession();
         Criteria familyCriteria = browsingSession.createCriteria(FamiliesEntity.class);
 
         FamiliesEntity family = (FamiliesEntity) familyCriteria
@@ -175,7 +171,7 @@ public class DAO {
     }
 
     public static UsersEntity loadParentAccount(int familyId) {
-        Session browsingSession = loadSession();
+        Session browsingSession = sessionFactory.openSession();
         Criteria adminCriteria = browsingSession.createCriteria(UsersEntity.class);
         UsersEntity parent = (UsersEntity) adminCriteria
                 .add(Restrictions.eq("familyid", familyId))
