@@ -43,7 +43,7 @@ public class HomeController {
      */
     private static final String QueryFormatString = "%1$s/%2$s/%3$s";
     private static final String ApiUrl = "https://api.hippoapi.com/v3/more/json";
-    private static final String YourAPIKey = "D4DABD4A"; //Your API Key
+    private static final String YourAPIKey = "F491A273"; //Your API Key
 
     @RequestMapping(value = "/")
     public String helloWorld() {

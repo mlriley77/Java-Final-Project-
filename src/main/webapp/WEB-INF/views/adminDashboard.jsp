@@ -35,7 +35,7 @@ ${navbar}
         </div>
     </div>
 </c:forEach>
-<a href="https://maps.googleapis.com/maps/api/geocode/xml?latlng=40.714224,-73.961452&key=AIzaSyAlb721ruUDaYfkOEwqHnNS-cNyNXx-0Pw">thisorthat</a>
+
 <script>
     window.onload = function() {
         var c = function(pos) {
