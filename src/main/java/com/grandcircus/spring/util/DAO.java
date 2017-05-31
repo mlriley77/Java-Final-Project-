@@ -9,6 +9,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.stat.Statistics;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
@@ -38,6 +39,14 @@ public class DAO {
         browsingSession.close();
 
         return newFamily;
+    }
+
+    public static void getSessionStats() {
+        Statistics stats = sessionFactory.getStatistics();
+        stats.setStatisticsEnabled(true);
+        System.out.println("Connection Count: " + sessionFactory.getStatistics().getConnectCount());
+        System.out.println("Open Session Count: " + sessionFactory.getStatistics().getSessionOpenCount());
+        System.out.println("Close Session Count: " + sessionFactory.getStatistics().getSessionCloseCount());
     }
 
     public static void newUser(String fName, String lName,
@@ -81,38 +90,45 @@ public class DAO {
 
     public static boolean doesUserExist(String email) {
         // this will pass if the email exists, or fail if the user does not exist.
-        try {
-            Session browsingSession = sessionFactory.openSession();
-            Criteria usersCriteria = browsingSession.createCriteria(UsersEntity.class);
+        boolean doesThisExist;
+        Session browsingSession = sessionFactory.openSession();
+        Criteria usersCriteria = browsingSession.createCriteria(UsersEntity.class);
 
+        try {
             UsersEntity newUser = (UsersEntity) usersCriteria
                     .add(Restrictions.eq("email", email))
                     .uniqueResult();
-            String doesThisExist = newUser.getEmail();
+            String testingEmail = newUser.getEmail();
 
-            browsingSession.close();
-            return true;
+            doesThisExist = true;
         } catch (NullPointerException e) {
-            return false;
+            doesThisExist = false;
+        } finally {
+            browsingSession.close();
         }
+
+        return doesThisExist;
     }
 
     public static boolean doesFamilyExist(int famId) {
-        try {
-            Session browsingSession = sessionFactory.openSession();
-            Criteria familyCriteria = browsingSession.createCriteria(FamiliesEntity.class);
+        boolean doesThisExist;
+        Session browsingSession = sessionFactory.openSession();
+        Criteria familyCriteria = browsingSession.createCriteria(FamiliesEntity.class);
 
+        try {
             FamiliesEntity family = (FamiliesEntity) familyCriteria
                     .add(Restrictions.eq("familyid", famId))
                     .uniqueResult();
-            int doesThisExist = family.getFamilyid();
+            int testingFamilyId = family.getFamilyid();
 
-            browsingSession.close();
-
-            return true;
+            doesThisExist = true;
         } catch (NullPointerException e) {
-            return false;
+            doesThisExist = false;
+        } finally {
+            browsingSession.close();
         }
+
+        return doesThisExist;
     }
 
     public static UsersEntity getUserByEmail(String email) {

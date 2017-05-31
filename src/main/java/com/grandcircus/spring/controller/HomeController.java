@@ -35,7 +35,13 @@ public class HomeController {
     private static final String YourAPIKey = "F491A273"; //Your API Key
 
     @RequestMapping(value = "/")
-    public String helloWorld() {
+    public String helloWorld(@CookieValue(value = "userId", defaultValue = "null") String userId) {
+        if(!(userId.equals("null"))) {
+          return "redirect:/dashboard";
+        }
+
+
+
         return "welcome";
     }
 
@@ -131,7 +137,8 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/action=login", method = RequestMethod.GET)
-    public String logIn() {
+    public String logIn(HttpServletResponse response) {
+        Cookies.deleteUserCookie(response);
         return "login";
     }
 
@@ -177,10 +184,12 @@ public class HomeController {
     public String dashboardPage(@CookieValue(value = "userId", defaultValue = "null") String userId,
                                 Model model) {
 
+        DAO.getSessionStats();
+
         // if the user is not logged in, it redirects to the login page
         if (userId.equals("null"))
         {
-            return "redirect:/action=login";
+            return "redirect:/";
         }
 
         UsersEntity thisAccount = DAO.loadThisAccount(userId);
