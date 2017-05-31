@@ -19,13 +19,18 @@
     <span id="menu-check">Check</span><span id="menu-in">in</span>
     <div id="menu-list">
         <span class="menu-item"><b>Family Id:</b> <i>${family.familyid}</i></span>
+        <a href="${pageContext.request.contextPath}/"><span class="menu-item"><b>Home</b></span></a>
+        <a href="${pageContext.request.contextPath}/dashboard"><span class="menu-item"><b>Dashboard</b></span></a>
+        <a href="${pageContext.request.contextPath}/action=login"><span class="menu-item"><b>Login</b></span></a>
+        <a href="${pageContext.request.contextPath}/action=register/user"><span class="menu-item"><b>Register a User Account</b></span></a>
+        <a href="${pageContext.request.contextPath}/action=register/family"><span class="menu-item"><b>Register an Admin Account</b></span></a>
         <a href="${pageContext.request.contextPath}/action=logout"><span class="menu-item"><b>Logout</b></span></a>
     </div>
 </div>
 <div class="container">
     <div class="row justify-content-center">
         <div id="side-bar" class="col-3">
-            <div align="right" id="tlkio" data-channel="checkinfamily" style="height:100%;text-align:right;" >
+            <div align="right" id="tlkio" data-channel="checkinroom${family.familyid}" style="height:100%;text-align:right;" >
                 <script async src="http://tlk.io/embed.js" type="text/javascript">
                 </script>
             </div>
@@ -35,7 +40,15 @@
                 <div class="row gutter" id="page-title-row">
                     <h2 id="page-title">Your Dashboard</h2>
                     <form action="${pageContext.request.contextPath}/action=submitlocation" method="post">
-                        <input type="submit" value="Check In" />
+                        <input type="submit" value="Check In" style="
+                        border: none;
+                        background: url('/resources/images/define-location-48.ico') transparent;
+                        background-size: 25px 25px;
+                        padding:2px;
+                        padding-right: 27px;
+                        height: 29px;
+                        width: 100px;
+                        cursor: pointer;"/>
                         <input type="hidden" name="lat" id="lat" />
                         <input type="hidden" name="long" id="long" />
                         <input type="hidden" name="userId" id="userId" value="${user.userid}"/>
@@ -79,10 +92,5 @@
 <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-
-<div id="tlkio" data-channel="checkinfamily" data-theme="theme--day" style="width:400px;height:600px;float:right;" >
-    <script async src="http://tlk.io/embed.js" type="text/javascript">
-    </script>
-</div>
 </body>
 </html>

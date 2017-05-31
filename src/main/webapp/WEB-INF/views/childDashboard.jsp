@@ -9,11 +9,22 @@
 <html>
 <head>
     <title>Child Console</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel="stylesheet" href="/resources/styles.css" />
 </head>
 <body>
-<h1>Check-In</h1>
-${navbar}
+<div id="nav-bar" class="gutter">
+    <span id="menu-check">Check</span><span id="menu-in">in</span>
+    <div id="menu-list">
+        <span class="menu-item"><b>Family Id:</b> <i>${family.familyid}</i></span>
+        <a href="${pageContext.request.contextPath}/"><span class="menu-item"><b>Home</b></span></a>
+        <a href="${pageContext.request.contextPath}/dashboard"><span class="menu-item"><b>Dashboard</b></span></a>
+        <a href="${pageContext.request.contextPath}/action=login"><span class="menu-item"><b>Login</b></span></a>
+        <a href="${pageContext.request.contextPath}/action=register/user"><span class="menu-item"><b>Register a User Account</b></span></a>
+        <a href="${pageContext.request.contextPath}/action=register/family"><span class="menu-item"><b>Register an Admin Account</b></span></a>
+        <a href="${pageContext.request.contextPath}/action=logout"><span class="menu-item"><b>Logout</b></span></a>
+    </div>
+</div>
 <h2>Dashboard</h2>
 <b>Family Id: </b>${family.familyid}<br />
 <form action="${pageContext.request.contextPath}/action=submitlocation" method="post">
@@ -22,6 +33,10 @@ ${navbar}
     <input type="hidden" name="long" id="long" />
     <input type="hidden" name="userId" id="userId" value="${user.userid}"/>
 </form>
+<div align="right" id="tlkio" data-channel="checkinroom${family.familyid}" style="height:100%;text-align:right;" >
+    <script async src="http://tlk.io/embed.js" type="text/javascript">
+    </script>
+</div>
 <b>${parent.fname} last checked in at ${parent.lasttime}</b>
 <div id="map">
     <iframe id="google_map"
