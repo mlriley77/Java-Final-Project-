@@ -14,7 +14,9 @@
 </head>
 <body>
 <h1>Check-In</h1>
-${navbar}
+<div id="error-box">
+    ${err}
+</div>
 <h2>Register A New Parent Account</h2>
 <form id="newFamily" action= "${pageContext.request.contextPath}/action=register/family/submit" method="post">
     <h1>Family Unit</h1>
@@ -36,39 +38,68 @@ ${navbar}
                   onclick=""
                   value="" onchange="emailValidation(this)"/> <div id="emailerror"> </div><br>
     Password: <input title="Password" type="password"
-                     id="password" name="password" required
-                     onclick=""
-                     value="" /><br />
+                     id="password" name="password"
+                     onchange="passwordVerification()" required/><br />
     Confirm Password: <input title="Confirm Password" type="password"
                              id="confPassword" name="confPassword"
-                             onclick="" value="" onchange="passwordVerification()"/><br />
-    <input type="submit" value="Register" />
+                             onchange="passwordVerification()" required/><br />
+    <input type="submit" value="Register" id="submitButton" disabled/>
 </form>
-
-
 <script>
+    var isPasswordGood = false,
+        isEmailGood = false;
+    var errorBox = document.getElementById("error-box");
+
     function passwordVerification() {
-        var password = document.getElementById("password").value;
-        var confPassword = document.getElementById("confPassword").value;
-        var submitButton = document.getElementById("formsubmit");
-        if (password !== confPassword) {
-            document.getElementById("password").style.borderColor = "#e34234";
-            document.getElementById("confPassword").style.borderColor = "#E34234";
-            alert("Passwords Do not match");
+        var password = document.getElementById("password");
+        var confPassword = document.getElementById("confPassword");
+
+        if (password.value !== confPassword.value) {
+            password.style.borderColor = "#e34234";
+            confPassword.style.borderColor = "#E34234";
+            confPassword.value = '';
+
+            var errorMessage = document.createTextNode("Passwords do not match");
+            errorBox.appendChild(errorMessage);
+
         } else {
-            submitButton.disabled = false;
+            isPasswordGood = true;
+            confPassword.style.borderColor = "inherit";
+            password.style.borderColor = "inherit";
+            errorBox.innerHTML = '';
         }
+        clearButton();
     }
     function emailValidation(element) {
+        var emailBox = document.getElementById("email");
         var email = element.value;
-        //console.log(element.value);
-        //var url = "http://localhost:8080/getemail2";
         var url = "/getemail2";
-        $.get(url, {email:email} ,function(data){
-            console.log(data);
-            //process response
-            $("#emailerror").empty().append(data);
+        var errorBox = document.getElementById("error-box");
+        $.get(url, {email:email}, function(data){
+            if (data === "Ok") {
+                errorBox.innerHTML = '';
+                isEmailGood = true;
+
+            } else {
+                var errorMessage = document.createTextNode("This is not a valid email");
+                errorBox.appendChild(errorMessage);
+                emailBox.style.borderColor = "#E34234";
+                emailBox.innerHTML = '';
+            }
         });
+        clearButton();
+    }
+
+    function clearButton() {
+        var submitButton = document.getElementById("submitButton");
+        submitButton.disabled = true;
+
+        if (isPasswordGood === true && isEmailGood === true) {
+            submitButton.disabled = false;
+        }
+
+        console.log("Password: " + isPasswordGood);
+        console.log("Email: " + isEmailGood);
     }
 </script>
 <script src="//code.jquery.com/jquery-2.2.1.js"></script>

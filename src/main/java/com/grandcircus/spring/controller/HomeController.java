@@ -33,6 +33,7 @@ public class HomeController {
     private static final String QueryFormatString = "%1$s/%2$s/%3$s";
     private static final String ApiUrl = "https://api.hippoapi.com/v3/more/json";
     private static final String YourAPIKey = "F491A273"; //Your API Key
+    private final DAO DAO = new DAO();
 
     @RequestMapping(value = "/")
     public String helloWorld(@CookieValue(value = "userId", defaultValue = "null") String userId) {
@@ -181,8 +182,6 @@ public class HomeController {
     public String dashboardPage(@CookieValue(value = "userId", defaultValue = "null") String userId,
                                 Model model) {
 
-        DAO.getSessionStats();
-
         // if the user is not logged in, it redirects to the login page
         if (userId.equals("null"))
         {
@@ -227,9 +226,7 @@ public class HomeController {
         long currentTimeLong = dateObject.getTime();
         return new Timestamp(currentTimeLong);
     }
-
     private static String errorMsg = "";
-
     private static void clearErrorMessage() {
         errorMsg = "";
     }
@@ -238,26 +235,26 @@ public class HomeController {
     public String setErrorMessage() {
         return errorMsg;
     }
-    @ModelAttribute("navbar")
-    public String loadNavBar(@CookieValue(value = "userId", defaultValue = "null") String userId) {
-        String loggedInMenu =
-                "<ul>\n" +
-                        "<li><a href=\"/\">Home</a></li>" +
-                        "<li><a href=\"/dashboard\">Dashboard</a></li>" +
-                        "<li><a href=\"/action=logout\">Logout</a></li>" +
-                        "</ul>\n";
-        String loggedOutMenu=
-                "<ul>\n" +
-                        "<li><a href=\"/\">Home</a></li>" +
-                        "<li><a href=\"/action=login\">Login</a></li>" +
-                        "<li><a href=\"/action=register/user\">Register As A Child</a></li>" +
-                        "<li><a href=\"/action=register/family\">Register As A Parent</a></li>" +
-                        "</ul>\n";
-
-        if (userId.equals("null")) {
-            return loggedOutMenu;
-        } else {
-            return loggedInMenu;
-        }
-    }
+//    @ModelAttribute("navbar")
+//    public String loadNavBar(@CookieValue(value = "userId", defaultValue = "null") String userId) {
+//        String loggedInMenu =
+//                "<ul>\n" +
+//                        "<li><a href=\"/\">Home</a></li>" +
+//                        "<li><a href=\"/dashboard\">Dashboard</a></li>" +
+//                        "<li><a href=\"/action=logout\">Logout</a></li>" +
+//                        "</ul>\n";
+//        String loggedOutMenu=
+//                "<ul>\n" +
+//                        "<li><a href=\"/\">Home</a></li>" +
+//                        "<li><a href=\"/action=login\">Login</a></li>" +
+//                        "<li><a href=\"/action=register/user\">Register As A Child</a></li>" +
+//                        "<li><a href=\"/action=register/family\">Register As A Parent</a></li>" +
+//                        "</ul>\n";
+//
+//        if (userId.equals("null")) {
+//            return loggedOutMenu;
+//        } else {
+//            return loggedInMenu;
+//        }
+//    }
 }

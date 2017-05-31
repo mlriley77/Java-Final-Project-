@@ -9,7 +9,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.stat.Statistics;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
@@ -24,10 +23,10 @@ import java.util.ArrayList;
 @Repository
 @Transactional
 public class DAO {
-    private static Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
-    private static SessionFactory sessionFactory = configurationObject.buildSessionFactory();
+    private Configuration configurationObject = new Configuration().configure("hibernate.cfg.xml");
+    private SessionFactory sessionFactory = configurationObject.buildSessionFactory();
 
-    public static FamiliesEntity newFamily(String famName) {
+    public FamiliesEntity newFamily(String famName) {
         Session browsingSession = sessionFactory.openSession();
         Transaction databaseTransaction = browsingSession.beginTransaction();
 
@@ -41,15 +40,7 @@ public class DAO {
         return newFamily;
     }
 
-    public static void getSessionStats() {
-        Statistics stats = sessionFactory.getStatistics();
-        stats.setStatisticsEnabled(true);
-        System.out.println("Connection Count: " + sessionFactory.getStatistics().getConnectCount());
-        System.out.println("Open Session Count: " + sessionFactory.getStatistics().getSessionOpenCount());
-        System.out.println("Close Session Count: " + sessionFactory.getStatistics().getSessionCloseCount());
-    }
-
-    public static void newUser(String fName, String lName,
+    public void newUser(String fName, String lName,
                                String email, String password,
                                int usergroup, int familyid) {
         Session browsingSession = sessionFactory.openSession();
@@ -68,7 +59,7 @@ public class DAO {
         browsingSession.close();
     }
 
-    public static void updateUserCoordinates(String checkinLat,
+    public void updateUserCoordinates(String checkinLat,
                                              String checkinLong,
                                              String userId) {
         Session browsingSession = sessionFactory.openSession();
@@ -88,9 +79,9 @@ public class DAO {
         browsingSession.close();
     }
 
-    public static boolean doesUserExist(String email) {
+    public boolean doesUserExist(String email) {
         // this will pass if the email exists, or fail if the user does not exist.
-        boolean doesThisExist;
+        boolean doesThisExist = true;
         Session browsingSession = sessionFactory.openSession();
         Criteria usersCriteria = browsingSession.createCriteria(UsersEntity.class);
 
@@ -98,10 +89,10 @@ public class DAO {
             UsersEntity newUser = (UsersEntity) usersCriteria
                     .add(Restrictions.eq("email", email))
                     .uniqueResult();
-            String testingEmail = newUser.getEmail();
-
-            doesThisExist = true;
-        } catch (NullPointerException e) {
+            if(newUser.getEmail() == null) {
+                doesThisExist = false;
+            }
+        } catch (Exception e) {
             doesThisExist = false;
         } finally {
             browsingSession.close();
@@ -110,8 +101,8 @@ public class DAO {
         return doesThisExist;
     }
 
-    public static boolean doesFamilyExist(int famId) {
-        boolean doesThisExist;
+    public boolean doesFamilyExist(int famId) {
+        boolean doesThisExist = true;
         Session browsingSession = sessionFactory.openSession();
         Criteria familyCriteria = browsingSession.createCriteria(FamiliesEntity.class);
 
@@ -119,9 +110,9 @@ public class DAO {
             FamiliesEntity family = (FamiliesEntity) familyCriteria
                     .add(Restrictions.eq("familyid", famId))
                     .uniqueResult();
-            int testingFamilyId = family.getFamilyid();
-
-            doesThisExist = true;
+            if(family.getFamilyid() == 0) {
+               doesThisExist = false;
+            }
         } catch (NullPointerException e) {
             doesThisExist = false;
         } finally {
@@ -131,7 +122,7 @@ public class DAO {
         return doesThisExist;
     }
 
-    public static UsersEntity getUserByEmail(String email) {
+    public UsersEntity getUserByEmail(String email) {
         Session browsingSession = sessionFactory.openSession();
         Criteria userCriteria = browsingSession.createCriteria(UsersEntity.class);
 
@@ -144,7 +135,7 @@ public class DAO {
         return user;
     }
 
-    public static UsersEntity loadThisAccount(String userId) {
+    public UsersEntity loadThisAccount(String userId) {
         Session browsingSession = sessionFactory.openSession();
         Criteria userCriteria = browsingSession.createCriteria(UsersEntity.class);
 
@@ -158,7 +149,7 @@ public class DAO {
         return user;
     }
 
-    public static ArrayList<UsersEntity> loadChildAccounts(int familyId) {
+    public ArrayList<UsersEntity> loadChildAccounts(int familyId) {
         Session browsingSession = sessionFactory.openSession();
 
         Criteria childCriteria = browsingSession.createCriteria(UsersEntity.class);
@@ -173,7 +164,7 @@ public class DAO {
         return children;
     }
 
-    public static FamiliesEntity loadFamily(int familyId) {
+    public FamiliesEntity loadFamily(int familyId) {
         Session browsingSession = sessionFactory.openSession();
         Criteria familyCriteria = browsingSession.createCriteria(FamiliesEntity.class);
 
@@ -186,7 +177,7 @@ public class DAO {
         return family;
     }
 
-    public static UsersEntity loadParentAccount(int familyId) {
+    public UsersEntity loadParentAccount(int familyId) {
         Session browsingSession = sessionFactory.openSession();
         Criteria adminCriteria = browsingSession.createCriteria(UsersEntity.class);
         UsersEntity parent = (UsersEntity) adminCriteria
