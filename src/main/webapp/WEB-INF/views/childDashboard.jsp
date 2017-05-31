@@ -44,5 +44,11 @@ ${navbar}
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDHLLLdbLtD8-GFY-wHJTzy08_q-4M_oGM&callback=initMap">
 </script>
+
+<div id="tlkio" data-channel="checkinfamily" data-theme="theme--day" style="width:400px;height:600px;float:right;" >
+    <script async src="http://tlk.io/embed.js" type="text/javascript">
+    </script>
+</div>
+
 </body>
 </html>

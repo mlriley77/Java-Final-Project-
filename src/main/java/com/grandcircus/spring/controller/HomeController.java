@@ -39,9 +39,6 @@ public class HomeController {
         if(!(userId.equals("null"))) {
           return "redirect:/dashboard";
         }
-
-
-
         return "welcome";
     }
 
