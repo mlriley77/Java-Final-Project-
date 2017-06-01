@@ -37,7 +37,7 @@
         <div class="col-12 col-lg-9">
             <div class="row gutter" id="page-title-row">
                 <div class="col-9">
-                    <h2 id="page-title">Your Dashboard <em><small class="text-muted">(${family.name} ID#: ${family.familyid})</small></em></h2>
+                    <h2 id="page-title">Your Dashboard <em><span class="text-muted title-row-small">(${family.name} ID#: ${family.familyid})</span></em></h2>
                 </div>
                 <div class="col-3" style="padding: 0;">
                     <form action="${pageContext.request.contextPath}/action=submitlocation" method="post" style="margin:0;padding:0;">

@@ -46,6 +46,10 @@ body {
     border-radius: 5px;
 }
 
+.title-row-small {
+    font-size:15pt;
+}
+
 #page-title {
     display: inline-block;
     margin:0 10px 0 0;
@@ -88,7 +92,7 @@ body {
 }
 
 .map-col {
-    padding: 8px;
+    padding: 0 8px;
     margin-bottom: 15px;
 }
 
@@ -145,8 +149,4 @@ body {
 
 .isHero {
 height: auto;
-}
-
-.isHero .header {
-    background-color: #F7CB15;
 }
