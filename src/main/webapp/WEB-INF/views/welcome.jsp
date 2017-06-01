@@ -11,24 +11,22 @@
     <title>Check-In - Home</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel="stylesheet" href="/resources/styles.css" />
+    <link rel="stylesheet" href="/resources/home.css"
 </head>
 <body>
 <div id="nav-bar" class="gutter">
-    <span id="menu-check">Check</span><span id="menu-in">in</span>
+    <a href="${pageContext.request.contextPath}/">
+        <img src="/resources/images/checkin-color-light.png" height="50px"/>
+    </a>
     <div id="menu-list">
-        <span class="menu-item"><b>Family Id:</b> <i>${family.familyid}</i></span>
-        <a href="${pageContext.request.contextPath}/"><span class="menu-item"><b>Home</b></span></a>
-        <a href="${pageContext.request.contextPath}/dashboard"><span class="menu-item"><b>Dashboard</b></span></a>
         <a href="${pageContext.request.contextPath}/action=login"><span class="menu-item"><b>Login</b></span></a>
         <a href="${pageContext.request.contextPath}/action=register/user"><span class="menu-item"><b>Register a User Account</b></span></a>
         <a href="${pageContext.request.contextPath}/action=register/family"><span class="menu-item"><b>Register an Admin Account</b></span></a>
-        <a href="${pageContext.request.contextPath}/action=logout"><span class="menu-item"><b>Logout</b></span></a>
     </div>
 </div>
-<h2>Hello, and welcome to check-In!</h2>
-Check-In is a....<br />
 
-${jsonString}
+<img src="/resources/images/checkin-color-light.png" />
+
 
 </body>
 </html>

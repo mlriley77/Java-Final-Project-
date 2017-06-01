@@ -27,9 +27,11 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-3 gutter">
-            <div align="right" id="tlkio" class="side-bar" data-channel="checkinroom${family.familyid}" style="height:100%;text-align:right;" >
-                <script async src="http://tlk.io/embed.js" type="text/javascript">
-                </script>
+            <div id="side-bar">
+                <div align="right" id="tlkio" data-channel="checkinroom${family.familyid}">
+                    <script async src="http://tlk.io/embed.js" type="text/javascript">
+                    </script>
+                </div>
             </div>
         </div>
         <div class="col-12 col-lg-9">
