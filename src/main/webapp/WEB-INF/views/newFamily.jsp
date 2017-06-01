@@ -32,7 +32,7 @@
     </div>
     <div class="row gutter" id="content-holder">
         <form id="newFamily" action= "${pageContext.request.contextPath}/action=register/family/submit" method="post" style="margin:0;padding:0;width:100%;">
-            <h4>Family Unit</h4>
+            <h4>Family Name</h4>
             <div class="form-group row justify-content-center">
                 <label for="famName" class="col-2 col-form-label">Family Name</label>
                 <div class="col-6">
@@ -41,7 +41,7 @@
                 </div>
             </div>
 
-            <h4>Leader Account</h4>
+            <h4>Account Details</h4>
             <div class="form-group row justify-content-center">
                 <label for="famName" class="col-2 col-form-label">First Name</label>
                 <div class="col-6">
