@@ -16,64 +16,59 @@
 </head>
 <body>
 <div id="nav-bar" class="gutter">
-    <span id="menu-check">Check</span><span id="menu-in">in</span>
+    <a href="${pageContext.request.contextPath}/">
+        <img src="/resources/images/checkin-color-light.png" height="50px"/>
+    </a>
     <div id="menu-list">
-        <span class="menu-item"><b>Family Id:</b> <i>${family.familyid}</i></span>
-        <a href="${pageContext.request.contextPath}/"><span class="menu-item"><b>Home</b></span></a>
         <a href="${pageContext.request.contextPath}/dashboard"><span class="menu-item"><b>Dashboard</b></span></a>
-        <a href="${pageContext.request.contextPath}/action=login"><span class="menu-item"><b>Login</b></span></a>
-        <a href="${pageContext.request.contextPath}/action=register/user"><span class="menu-item"><b>Register a User Account</b></span></a>
-        <a href="${pageContext.request.contextPath}/action=register/family"><span class="menu-item"><b>Register an Admin Account</b></span></a>
         <a href="${pageContext.request.contextPath}/action=logout"><span class="menu-item"><b>Logout</b></span></a>
     </div>
 </div>
 <div class="container">
     <div class="row justify-content-center">
-        <div id="side-bar" class="col-3">
-            <div align="right" id="tlkio" data-channel="checkinroom${family.familyid}" style="height:100%;text-align:right;" >
-                <script async src="http://tlk.io/embed.js" type="text/javascript">
-                </script>
+        <div class="col-12 col-lg-3 gutter">
+            <div id="side-bar">
+                <div align="right" id="tlkio" data-channel="checkinroom${family.familyid}">
+                    <script async src="http://tlk.io/embed.js" type="text/javascript">
+                    </script>
+                </div>
             </div>
         </div>
-        <div id="dashboard-content" class="col-9">
-            <div class="col-12">
-                <div class="row gutter" id="page-title-row">
-                    <h2 id="page-title">Your Dashboard</h2>
-                    <form action="${pageContext.request.contextPath}/action=submitlocation" method="post">
-                        <input type="submit" value="Check In" style="
-                        border: none;
-                        background: url('/resources/images/define-location-48.ico') transparent;
-                        background-size: 25px 25px;
-                        padding:2px;
-                        padding-right: 27px;
-                        height: 29px;
-                        width: 100px;
-                        cursor: pointer;"/>
+        <div class="col-12 col-lg-9">
+            <div class="row gutter" id="page-title-row">
+                <div class="col-9">
+                    <h2 id="page-title">Your Dashboard <em><small class="text-muted">(${family.name} ID#: ${family.familyid})</small></em></h2>
+                </div>
+                <div class="col-3" style="padding: 0;">
+                    <form action="${pageContext.request.contextPath}/action=submitlocation" method="post" style="margin:0;padding:0;">
+                        <button class="btn btn-primary btn-block orange-btn"
+                                type="submit" id="submitButton">
+                            Check In
+                        </button>
                         <input type="hidden" name="lat" id="lat" />
                         <input type="hidden" name="long" id="long" />
                         <input type="hidden" name="userId" id="userId" value="${user.userid}"/>
                     </form>
                 </div>
             </div>
-            <div class="col-12" id="map-holder">
-                <div class="row gutter">
-                    <c:forEach items="${children}" var="child">
-                        <div class="col-6 gutter">
-                            <div class="maps">
-                                <div class="map-name"><b>${child.fname}</b></div>
-                                <div class="map-view">
-                                    <iframe id="google_map" frameborder="0" scrolling="no"
-                                            width="100%"
-                                            marginheight="0" marginwidth="0"
-                                            src="https://maps.google.com/?q=${child.lastlat}, ${child.lastlong}&z=15&output=embed">
-                                    </iframe>
-                                </div>
-                                <div class="map-time"><em>Last Check In: ${child.lasttime}</em></div>
-                                <div class="map-location">Grandma's House</div>
+            <div class="row justify-content-center">
+                <c:forEach items="${children}" var="child">
+                    <div class="col-12 col-lg-6 map-col">
+                        <div class="maps">
+                            <div class="map-name"><b>${child.fname}</b></div>
+                            <div class="map-view">
+                                <iframe id="google_map" frameborder="0" scrolling="no"
+                                        width="100%"
+                                        marginheight="0" marginwidth="0"
+                                        src="https://maps.google.com/?q=${child.lastlat}, ${child.lastlong}&z=15&output=embed">
+                                </iframe>
+                            </div>
+                            <div class="map-time">
+                                <em>Last Check In: ${child.lasttime}</em>
                             </div>
                         </div>
-                    </c:forEach>
-                </div>
+                    </div>
+                </c:forEach>
             </div>
         </div>
     </div>
