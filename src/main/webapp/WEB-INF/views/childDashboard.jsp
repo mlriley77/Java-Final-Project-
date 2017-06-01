@@ -19,7 +19,6 @@
         <img src="/resources/images/checkin-color-light.png" height="50px"/>
     </a>
     <div id="menu-list">
-        <span class="menu-item"><b>Family Id:</b> <i>${family.familyid}</i></span>
         <a href="${pageContext.request.contextPath}/dashboard"><span class="menu-item"><b>Dashboard</b></span></a>
         <a href="${pageContext.request.contextPath}/action=logout"><span class="menu-item"><b>Logout</b></span></a>
     </div>
