@@ -15,14 +15,12 @@
 </head>
 <body>
 <div id="nav-bar" class="gutter">
-    <span id="menu-check">Check</span><span id="menu-in">in</span>
+    <a href="${pageContext.request.contextPath}/">
+        <img src="/resources/images/checkin-color-light.png" height="50px"/>
+    </a>
     <div id="menu-list">
         <span class="menu-item"><b>Family Id:</b> <i>${family.familyid}</i></span>
-        <a href="${pageContext.request.contextPath}/"><span class="menu-item"><b>Home</b></span></a>
         <a href="${pageContext.request.contextPath}/dashboard"><span class="menu-item"><b>Dashboard</b></span></a>
-        <a href="${pageContext.request.contextPath}/action=login"><span class="menu-item"><b>Login</b></span></a>
-        <a href="${pageContext.request.contextPath}/action=register/user"><span class="menu-item"><b>Register a User Account</b></span></a>
-        <a href="${pageContext.request.contextPath}/action=register/family"><span class="menu-item"><b>Register an Admin Account</b></span></a>
         <a href="${pageContext.request.contextPath}/action=logout"><span class="menu-item"><b>Logout</b></span></a>
     </div>
 </div>
@@ -34,23 +32,21 @@
                 </script>
             </div>
         </div>
-        <div id="dashboard-content" class="col-12 col-lg-9">
-            <div class="col-12">
-                <div class="row gutter" id="page-title-row">
-                    <div class="col-9">
-                        <h2 id="page-title">Your Dashboard</h2>
-                    </div>
-                    <div class="col-3" style="padding: 0;">
-                        <form action="${pageContext.request.contextPath}/action=submitlocation" method="post">
-                            <button class="btn btn-primary btn-block"
-                                    type="submit" id="submitButton">
-                                Check In
-                            </button>
-                            <input type="hidden" name="lat" id="lat" />
-                            <input type="hidden" name="long" id="long" />
-                            <input type="hidden" name="userId" id="userId" value="${user.userid}"/>
-                        </form>
-                    </div>
+        <div class="col-12 col-lg-9">
+            <div class="row gutter" id="page-title-row">
+                <div class="col-9">
+                    <h2 id="page-title">Your Dashboard <em><span class="text-muted title-row-small">(${family.name} ID#: ${family.familyid})</span></em></h2>
+                </div>
+                <div class="col-3" style="padding: 0;">
+                    <form action="${pageContext.request.contextPath}/action=submitlocation" method="post" style="margin:0;padding:0;">
+                        <button class="btn btn-primary btn-block orange-btn"
+                                type="submit" id="submitButton">
+                            Check In
+                        </button>
+                        <input type="hidden" name="lat" id="lat" />
+                        <input type="hidden" name="long" id="long" />
+                        <input type="hidden" name="userId" id="userId" value="${user.userid}"/>
+                    </form>
                 </div>
             </div>
             <div class="col-12" id="map-holder">
@@ -67,7 +63,7 @@
                                 </iframe>
                             </div>
                             <div class="map-time"><em>Last Check In: ${parent.lasttime}</em></div>
-                            <div class="map-location">Grandma's House</div>
+
                         </div>
                     </div>
                 </div>
