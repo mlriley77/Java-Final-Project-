@@ -297,7 +297,9 @@ public class HomeController {
         long currentTimeLong = dateObject.getTime();
         return new Timestamp(currentTimeLong);
     }
+
     private static String errorMsg = "";
+
     private static void clearErrorMessage() {
         errorMsg = "";
     }

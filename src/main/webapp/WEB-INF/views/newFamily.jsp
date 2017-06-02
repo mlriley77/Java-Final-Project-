@@ -26,7 +26,6 @@
                 <div id="menu-list">
                     <a href="${pageContext.request.contextPath}/action=login"><span class="menu-item"><b>Login</b></span></a>
                     <a href="${pageContext.request.contextPath}/action=register/user"><span class="menu-item"><b>Register a User Account</b></span></a>
-                    <a href="${pageContext.request.contextPath}/action=register/family"><span class="menu-item"><b>Register an Admin Account</b></span></a>
                 </div>
             </div>
         </div>
