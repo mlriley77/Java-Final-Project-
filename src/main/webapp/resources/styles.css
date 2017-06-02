@@ -1,8 +1,31 @@
 body {
     margin:0;
-    padding-bottom: 15px;
     background: #76BED0 url('/resources/images/light-bg.png');
 }
+
+#foot-bar {
+    background: #143B56 url('/resources/images/dark-bg.png');
+    color: #76BED0;
+    text-align: left;
+    padding: 10px 15px;
+    box-shadow: 0 3px 8px #225B75;
+}
+
+#foot-bar h4 {
+text-align: center;
+}
+#foot-bar img {
+    display: block;
+    margin: auto;
+}
+.copy-box {
+    padding: 5px;
+}
+.copy-info {
+    padding: 5px;
+    color: #fff;
+}
+
 
 #nav-bar {
     background: #143B56;

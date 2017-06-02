@@ -60,6 +60,7 @@
         </form>
     </div>
 </div>
+<%@ include file="footer.jsp"%>
 <script>
 var errorBox = document.getElementById("error-box");
 var javaError = "${err}";

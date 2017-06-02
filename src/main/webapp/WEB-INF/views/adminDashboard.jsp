@@ -81,6 +81,7 @@
         </div>
     </div>
 </div>
+<%@ include file="footer.jsp"%>
 <script>
     window.onload = function() {
         var c = function(pos) {

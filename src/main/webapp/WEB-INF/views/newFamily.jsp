@@ -98,6 +98,7 @@
         </form>
     </div>
 </div>
+<%@ include file="footer.jsp"%>
 <script>
     var isPasswordGood = false,
         isEmailGood = false;
