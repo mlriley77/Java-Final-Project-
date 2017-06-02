@@ -37,52 +37,67 @@ public class HomeController {
 
     @RequestMapping(value = "/")
     public String helloWorld(@CookieValue(value = "userId", defaultValue = "null") String userId) {
-        if(!(userId.equals("null"))) {
-          return "redirect:/dashboard";
+        try {
+            if (!(userId.equals("null"))) {
+                return "redirect:/dashboard";
+            }
+            return "welcome";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/errorPage";
         }
-        return "welcome";
     }
 
     @RequestMapping(value = "getemail2", method = RequestMethod.GET, produces="application/text")
     public @ResponseBody String getEmail2(@RequestParam("email") String email) {
-        String result = null;
         try {
-            // Format the request url to the correct structure for the request
-            URL requestUrl = new URL(String.format(QueryFormatString, ApiUrl, YourAPIKey, email));
-            // Open a connection to the website
-            HttpURLConnection myRequest = (HttpURLConnection) requestUrl.openConnection();
-            // Set the type to HTTP GET
-            myRequest.setRequestMethod("GET");
-            // Create a new buffered reader to read the response back from the server
-            BufferedReader reader = new BufferedReader(new InputStreamReader(myRequest.getInputStream()));
+            String result = null;
+            try {
+                // Format the request url to the correct structure for the request
+                URL requestUrl = new URL(String.format(QueryFormatString, ApiUrl, YourAPIKey, email));
+                // Open a connection to the website
+                HttpURLConnection myRequest = (HttpURLConnection) requestUrl.openConnection();
+                // Set the type to HTTP GET
+                myRequest.setRequestMethod("GET");
+                // Create a new buffered reader to read the response back from the server
+                BufferedReader reader = new BufferedReader(new InputStreamReader(myRequest.getInputStream()));
 
-            String inputLine;
-            StringBuilder response = new StringBuilder();
+                String inputLine;
+                StringBuilder response = new StringBuilder();
 
-            //Read in the response line from the server
-            while ((inputLine = reader.readLine()) != null) {
-                response.append(inputLine);
+                //Read in the response line from the server
+                while ((inputLine = reader.readLine()) != null) {
+                    response.append(inputLine);
+                }
+
+                // Close the reader
+                reader.close();
+
+                JSONObject json = new JSONObject(response.toString());
+
+                result = json.getJSONObject("emailVerification").getJSONObject("mailboxVerification").get("result").toString();
+
+            } catch (IOException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
-            // Close the reader
-            reader.close();
-
-            JSONObject json = new JSONObject(response.toString());
-
-            result = json.getJSONObject("emailVerification").getJSONObject("mailboxVerification").get("result").toString();
-
-        } catch (IOException ex) {
-            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JSONException e) {
+            return result;
+        } catch (Exception e) {
             e.printStackTrace();
+            return "redirect:/errorPage";
         }
-        return result;
     }
 
     @RequestMapping(value = "/action=register/family", method = RequestMethod.GET)
     public String registerNewAdmin(HttpServletResponse response) {
-        Cookies.deleteUserCookie(response);
-        return "newFamily";
+        try {
+            Cookies.deleteUserCookie(response);
+            return "newFamily";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/errorPage";
+        }
     }
 
     @RequestMapping(value = "/action=register/family/submit", method = RequestMethod.POST)
@@ -91,23 +106,38 @@ public class HomeController {
                            @RequestParam("lName") String lName,
                            @RequestParam("email") String email,
                            @RequestParam("password") String password) {
-        clearErrorMessage();
-
-        FamiliesEntity family = DAO.newFamily(famName);
-        if (DAO.doesUserExist(email)) {
-            errorMsg = "This email is already associated with an account.";
-            return "redirect:/action=register/family";
-        } else {
+        try {
             clearErrorMessage();
-            DAO.newUser(fName, lName, email, password, 0, family.getFamilyid());
-            return "redirect:/action=login";
+
+            FamiliesEntity family = DAO.newFamily(famName);
+            if (DAO.doesUserExist(email)) {
+                errorMsg = "This email is already associated with an account.";
+                return "redirect:/action=register/family";
+            } else {
+                clearErrorMessage();
+                DAO.newUser(fName, lName, email, password, 0, family.getFamilyid());
+                return "redirect:/action=login";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/errorPage";
         }
     }
 
     @RequestMapping(value = "/action=register/user", method = RequestMethod.GET)
     public String registerNewChild(HttpServletResponse response) {
-        Cookies.deleteUserCookie(response);
-        return "newUser";
+        try {
+            try {
+                Cookies.deleteUserCookie(response);
+                return "newUser";
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "redirect:/errorPage";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/errorPage";
+        }
     }
 
     @RequestMapping(value = "/action=register/user/submit", method = RequestMethod.POST)
@@ -117,27 +147,37 @@ public class HomeController {
                            @RequestParam("email") String email,
                            @RequestParam("password") String password) {
 
-        clearErrorMessage();
-
-        if (!DAO.doesFamilyExist(famId)) {
-            errorMsg = "This family ID does not exist";
-            return "redirect:/action=register/user";
-        }
-
-        if (DAO.doesUserExist(email)) {
-            errorMsg = "This email is already associated with an account.";
-            return "redirect:/action=register/family";
-        } else {
+        try {
             clearErrorMessage();
-            DAO.newUser(fName, lName, email, password, 1, famId);
-            return "redirect:/action=login";
+
+            if (!DAO.doesFamilyExist(famId)) {
+                errorMsg = "This family ID does not exist";
+                return "redirect:/action=register/user";
+            }
+
+            if (DAO.doesUserExist(email)) {
+                errorMsg = "This email is already associated with an account.";
+                return "redirect:/action=register/family";
+            } else {
+                clearErrorMessage();
+                DAO.newUser(fName, lName, email, password, 1, famId);
+                return "redirect:/action=login";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/errorPage";
         }
     }
 
     @RequestMapping(value = "/action=login", method = RequestMethod.GET)
     public String logIn(HttpServletResponse response) {
-        Cookies.deleteUserCookie(response);
-        return "login";
+        try {
+            Cookies.deleteUserCookie(response);
+            return "login";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/errorPage";
+        }
     }
 
     @RequestMapping(value = "/action=login/submit", method = RequestMethod.POST)
@@ -145,72 +185,95 @@ public class HomeController {
                            @RequestParam(value = "password", required = false) String password,
                            HttpServletResponse response) {
 
-        clearErrorMessage();
-        Cookies.deleteUserCookie(response);
+        try {
+            clearErrorMessage();
+            Cookies.deleteUserCookie(response);
 
-        // kicks back to login if the email doesn't exist
-        if (!(DAO.doesUserExist(email))) {
-            errorMsg = "Your email or password is incorrect";
-            return "redirect:/action=login";
+            // kicks back to login if the email doesn't exist
+            if (!(DAO.doesUserExist(email))) {
+                errorMsg = "Your email or password is incorrect";
+                return "redirect:/action=login";
+            }
+
+            UsersEntity user = DAO.getUserByEmail(email);
+            System.out.println("line159");
+
+            // kicks back if the password is incorrect
+            if (!(user.getPassword().equals(password))) {
+                errorMsg = "Your email or password is incorrect";
+                System.out.println("line164");
+                return "redirect:/action=login";
+            }
+
+            // if we get to this point, the username and password are correct
+            clearErrorMessage();
+            System.out.println("line170");
+
+            Cookies.createUserCookie("" + user.getUserid(),
+                    "" + user.getUsergroup(),
+                    response);
+
+            return "redirect:/dashboard";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/error";
         }
-
-        UsersEntity user = DAO.getUserByEmail(email);
-        System.out.println("line159");
-
-        // kicks back if the password is incorrect
-        if (!(user.getPassword().equals(password))) {
-            errorMsg = "Your email or password is incorrect";
-            System.out.println("line164");
-            return "redirect:/action=login";
-        }
-
-        // if we get to this point, the username and password are correct
-        clearErrorMessage();
-        System.out.println("line170");
-
-        Cookies.createUserCookie("" + user.getUserid(),
-                "" + user.getUsergroup(),
-                response);
-
-        return "redirect:/dashboard";
     }
 
     @RequestMapping(value = "/action=logout")
     public String logOut(HttpServletResponse response) {
-        Cookies.deleteUserCookie(response);
-        return "redirect:/";
+        try {
+            Cookies.deleteUserCookie(response);
+            return "redirect:/";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/errorPage";
+        }
+    }
+
+    @RequestMapping(value = "/error")
+    public String errorPage() {
+        try {
+            return "errorPage";
+        } catch (Exception e) {
+            return "errorPage";
+        }
     }
 
     @RequestMapping("/dashboard")
     public String dashboardPage(@CookieValue(value = "userId", defaultValue = "null") String userId,
                                 Model model) {
 
-        // if the user is not logged in, it redirects to the login page
-        if (userId.equals("null"))
-        {
-            return "redirect:/";
-        }
+        try {
+            // if the user is not logged in, it redirects to the login page
+            if (userId.equals("null")) {
+                return "redirect:/";
+            }
 
-        UsersEntity thisAccount = DAO.loadThisAccount(userId);
+            UsersEntity thisAccount = DAO.loadThisAccount(userId);
 
-        if (thisAccount.getUsergroup() == 0) {
-            ArrayList<UsersEntity> childAccounts = DAO.loadChildAccounts(thisAccount.getFamilyid());
-            FamiliesEntity family = DAO.loadFamily(thisAccount.getFamilyid());
+            if (thisAccount.getUsergroup() == 0) {
+                ArrayList<UsersEntity> childAccounts = DAO.loadChildAccounts(thisAccount.getFamilyid());
+                FamiliesEntity family = DAO.loadFamily(thisAccount.getFamilyid());
 
-            model.addAttribute("user", thisAccount);
-            model.addAttribute("children", childAccounts);
-            model.addAttribute("family", family);
+                model.addAttribute("user", thisAccount);
+                model.addAttribute("children", childAccounts);
+                model.addAttribute("family", family);
 
-            return "adminDashboard";
-        } else {
-            UsersEntity parent = DAO.loadParentAccount(thisAccount.getFamilyid());
-            FamiliesEntity family = DAO.loadFamily(thisAccount.getFamilyid());
+                return "adminDashboard";
+            } else {
+                UsersEntity parent = DAO.loadParentAccount(thisAccount.getFamilyid());
+                FamiliesEntity family = DAO.loadFamily(thisAccount.getFamilyid());
 
-            model.addAttribute("user", thisAccount);
-            model.addAttribute("parent", parent);
-            model.addAttribute("family", family);
+                model.addAttribute("user", thisAccount);
+                model.addAttribute("parent", parent);
+                model.addAttribute("family", family);
 
-            return "childDashboard";
+                return "childDashboard";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/errorPage";
         }
     }
 
@@ -219,9 +282,14 @@ public class HomeController {
                              @RequestParam("long") String checkinLong,
                              @RequestParam("userId") String userId) {
 
-        DAO.updateUserCoordinates(checkinLat, checkinLong, userId);
+        try {
+            DAO.updateUserCoordinates(checkinLat, checkinLong, userId);
 
-        return "redirect:/dashboard";
+            return "redirect:/dashboard";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/errorPage";
+        }
     }
 
     public static Timestamp getCurrentTime() {
@@ -238,26 +306,4 @@ public class HomeController {
     public String setErrorMessage() {
         return errorMsg;
     }
-//    @ModelAttribute("navbar")
-//    public String loadNavBar(@CookieValue(value = "userId", defaultValue = "null") String userId) {
-//        String loggedInMenu =
-//                "<ul>\n" +
-//                        "<li><a href=\"/\">Home</a></li>" +
-//                        "<li><a href=\"/dashboard\">Dashboard</a></li>" +
-//                        "<li><a href=\"/action=logout\">Logout</a></li>" +
-//                        "</ul>\n";
-//        String loggedOutMenu=
-//                "<ul>\n" +
-//                        "<li><a href=\"/\">Home</a></li>" +
-//                        "<li><a href=\"/action=login\">Login</a></li>" +
-//                        "<li><a href=\"/action=register/user\">Register As A Child</a></li>" +
-//                        "<li><a href=\"/action=register/family\">Register As A Parent</a></li>" +
-//                        "</ul>\n";
-//
-//        if (userId.equals("null")) {
-//            return loggedOutMenu;
-//        } else {
-//            return loggedInMenu;
-//        }
-//    }
 }

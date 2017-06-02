@@ -32,6 +32,10 @@ body {
     margin: -4px 9px 4px -4px;
 }
 
+.error-page-message {
+
+}
+
 .home-page-menu:hover #home-image {
     margin-top: -5px;
     margin-left: -5px;
