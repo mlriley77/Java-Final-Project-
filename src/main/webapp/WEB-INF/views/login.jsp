@@ -13,62 +13,67 @@
     <link rel="stylesheet" href="/resources/styles.css" />
 </head>
 <body>
-<div id="nav-bar" class="gutter">
-    <a href="${pageContext.request.contextPath}/">
-        <img src="/resources/images/checkin-color-light.png" height="50px"/>
-    </a>
-    <div id="menu-list">
-        <a href="${pageContext.request.contextPath}/action=login"><span class="menu-item"><b>Login</b></span></a>
-        <a href="${pageContext.request.contextPath}/action=register/user"><span class="menu-item"><b>Register a User Account</b></span></a>
-        <a href="${pageContext.request.contextPath}/action=register/family"><span class="menu-item"><b>Register an Admin Account</b></span></a>
+<div id="nav-bar">
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                <a href="${pageContext.request.contextPath}/">
+                    <img src="/resources/images/checkin-color-light.png" height="50px"/>
+                </a>
+            </div>
+            <div class="col-9">
+                <div id="menu-list">
+                    <a href="${pageContext.request.contextPath}/action=login"><span class="menu-item"><b>Login</b></span></a>
+                    <a href="${pageContext.request.contextPath}/action=register/user"><span class="menu-item"><b>Register a User Account</b></span></a>
+                    <a href="${pageContext.request.contextPath}/action=register/family"><span class="menu-item"><b>Register an Admin Account</b></span></a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
-<form action="${pageContext.request.contextPath}/action=login/submit" method="post">
-    Email: <input title="Email" type="text"
-                  id="" name="email"
-                  onclick="" /><br />
-    Password: <input title="Password" type="password"
-                     id="" name="password"
-                     onclick="" /><br />
-    ${err}
-    <input type="submit" value="Log In" />
-</form>
-
 <div class="container">
     <div class="row gutter" id="page-title-row">
         <div class="col-12">
             <h1 id="page-title" class="display-4">Please Login.</h1>
         </div>
     </div>
-<div class="row gutter" id="content-holder">
-    <form action="${pageContext.request.contextPath}/action=login/submit" method="post" style="margin:0;padding:0;width:100%;">
-        <div class="form-group row justify-content-center">
-            <label for="email" class="col-2 col-form-label">Email: </label>
-            <div class="col-6">
-                <input class="form-control" title="Email" type="text"
-                       id="email" name="password" onclick=""/>
+    <div class="row gutter" id="content-holder">
+        <form action="${pageContext.request.contextPath}/action=login/submit" method="post" style="margin:0;padding:0;width:100%;">
+            <div class="form-group row justify-content-center">
+                <label for="email" class="col-2 col-form-label">Email: </label>
+                <div class="col-6">
+                    <input class="form-control" title="Email" type="text"
+                           id="email" name="email" />
+                </div>
             </div>
-        </div>
-        <div class="form-group row justify-content-center">
-            <label for="password" class="col-2 col-form-label">Password: </label>
-            <div class="col-6">
-                <input class="form-control" title="Password" type="password"
-                       id="password" name="password" onclick=""/>
+            <div class="form-group row justify-content-center">
+                <label for="password" class="col-2 col-form-label">Password: </label>
+                <div class="col-6">
+                    <input class="form-control" title="Password" type="password"
+                           id="password" name="password" />
+                </div>
             </div>
-        </div>
-        <div class="col-12" id="error-box">
-            ${err}
-        </div>
-
-        <%--<button class="btn btn-primary btn-block orange-btn"--%>
-                <%--type="submit" value="Log In">--%>
-            <%--Log In--%>
-        <%--</button>--%>
-
-        <input class="btn btn-primary btn-block orange-btn" type="submit" value="Log In" />
-    </form>
+            <div class="col-12" id="error-box">
+                ${err}
+            </div>
+            <input class="btn btn-primary btn-block orange-btn" type="submit" value="Log In" />
+        </form>
+    </div>
 </div>
-</div>
+<script>
+var errorBox = document.getElementById("error-box");
+var javaError = "${err}";
+
+window.onload = function() {
+if (javaError !== "") {
+errorBox.setAttribute("style",
+"border:1px solid #FFA62F;" +
+"padding: 5px;" +
+"border-radius: 5px;" +
+"margin-bottom: 15px;");
+console.log("this is still happening!");
+}
+};
+</script>
 </body>
 </html>

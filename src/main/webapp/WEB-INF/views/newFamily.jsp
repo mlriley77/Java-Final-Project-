@@ -14,14 +14,22 @@
     <link rel="stylesheet" href="/resources/styles.css" />
 </head>
 <body>
-<div id="nav-bar" class="gutter">
-    <a href="${pageContext.request.contextPath}/">
-    <img src="/resources/images/checkin-color-light.png" height="50px"/>
-    </a>
-    <div id="menu-list">
-        <a href="${pageContext.request.contextPath}/action=login"><span class="menu-item"><b>Login</b></span></a>
-        <a href="${pageContext.request.contextPath}/action=register/user"><span class="menu-item"><b>Register a User Account</b></span></a>
-        <a href="${pageContext.request.contextPath}/action=register/family"><span class="menu-item"><b>Register an Admin Account</b></span></a>
+<div id="nav-bar">
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                <a href="${pageContext.request.contextPath}/">
+                    <img src="/resources/images/checkin-color-light.png" height="50px"/>
+                </a>
+            </div>
+            <div class="col-9">
+                <div id="menu-list">
+                    <a href="${pageContext.request.contextPath}/action=login"><span class="menu-item"><b>Login</b></span></a>
+                    <a href="${pageContext.request.contextPath}/action=register/user"><span class="menu-item"><b>Register a User Account</b></span></a>
+                    <a href="${pageContext.request.contextPath}/action=register/family"><span class="menu-item"><b>Register an Admin Account</b></span></a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="container">

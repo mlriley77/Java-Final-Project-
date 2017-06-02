@@ -1,16 +1,17 @@
 body {
     margin:0;
     padding-bottom: 15px;
-    background: #76BED0 url('/resources/images/checkin-white-20.png') no-repeat bottom 10px right 10px;
-    background-size: 200px;
+    background: #76BED0 url('/resources/images/light-bg.png');
 }
 
 #nav-bar {
     background: #143B56;
     color: #76BED0;
     text-align: left;
-    padding: 5px 5px 5px 15px;
+    padding: 10px 15px;
     margin-bottom: 30px;
+    box-shadow: 0 3px 8px #225B75;
+    line-height: 34px;
 }
 
 #nav-bar:after {
@@ -22,23 +23,27 @@ body {
 #menu-list {
     display: inline-block;
     float: right;
-    height: 54px;
+    vertical-align: middle;
 }
 
 .menu-item {
     color: #FF7054;
+    border-radius: 10px;
     vertical-align: top;
     display: inline-block;
-    padding: 15px;
-    margin-right: 5px;
+    padding: 8px;
     transition-duration: 0.7s;
+    background-color: #FFE16D;
+    margin: -3px -3px 0 8px;
+    box-shadow: 3px 3px 0 #13213b;
 }
 
 .menu-item:hover {
-    color: #143B56;
     transition-duration: 0.7s;
     background-color: #F7CB15;
-    border-radius: 10px;
+    color: black;
+    margin: 0 -6px 0 10px;
+    box-shadow: none;
 }
 
 #page-title-row {
@@ -82,6 +87,15 @@ body {
     background: #fff;
     text-align:center;
     border-radius: 5px;
+}
+
+@media (max-width: 991px) {
+    .hidden-lg {
+        display: none;
+    }
+    .title-row-small {
+        display:block;
+    }
 }
 
 #content-holder label {

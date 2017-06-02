@@ -150,12 +150,6 @@ public class HomeController {
 
         // kicks back to login if the email doesn't exist
         if (!(DAO.doesUserExist(email))) {
-
-            UsersEntity user = DAO.getUserByEmail(email);
-
-            System.out.println("your email is: ");
-            System.out.println(user.getEmail() + "...");
-            System.out.println("line153");
             errorMsg = "Your email or password is incorrect";
             return "redirect:/action=login";
         }

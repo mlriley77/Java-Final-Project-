@@ -13,15 +13,22 @@
     <link rel="stylesheet" href="/resources/styles.css" />
 </head>
 <body>
-
-<div id="nav-bar" class="gutter">
-    <a href="${pageContext.request.contextPath}/">
-        <img src="/resources/images/checkin-color-light.png" height="50px"/>
-    </a>
-    <div id="menu-list">
-        <a href="${pageContext.request.contextPath}/action=login"><span class="menu-item"><b>Login</b></span></a>
-        <a href="${pageContext.request.contextPath}/action=register/user"><span class="menu-item"><b>Register a User Account</b></span></a>
-        <a href="${pageContext.request.contextPath}/action=register/family"><span class="menu-item"><b>Register an Admin Account</b></span></a>
+<div id="nav-bar">
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                <a href="${pageContext.request.contextPath}/">
+                    <img src="/resources/images/checkin-color-light.png" height="50px"/>
+                </a>
+            </div>
+            <div class="col-9">
+                <div id="menu-list">
+                    <a href="${pageContext.request.contextPath}/action=login"><span class="menu-item"><b>Login</b></span></a>
+                    <a href="${pageContext.request.contextPath}/action=register/user"><span class="menu-item"><b>Register a User Account</b></span></a>
+                    <a href="${pageContext.request.contextPath}/action=register/family"><span class="menu-item"><b>Register an Admin Account</b></span></a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="container">
@@ -35,10 +42,11 @@
         <form id="newFamily" action= "${pageContext.request.contextPath}/action=register/user/submit" method="post" style="margin:0;padding:0;width:100%;">
             <h4>Family Number  </h4>
             <div class="form-group row justify-content-center">
-                <label for="famId" class="col-2 col-form-label">Family # (found in parent account) </label>
+                <label for="famId" class="col-2 col-form-label">Family Id #</label>
                 <div class="col-6">
                     <input class="form-control" title="Found in Parent Account"
                            type="text" id="famId" name="famId"/>
+                    <small class="form-text text-muted"><em>(Found within the parent's account)</em></small>
                 </div>
             </div>
 

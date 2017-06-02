@@ -1,5 +1,5 @@
 body {
-    background: #143B56;
+    background: #143B56 url('/resources/images/dark-bg.png');
     position: relative;
 }
 
@@ -9,6 +9,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    transition-duration: 0.7s;
 }
 
 .menu-item {
@@ -20,10 +21,29 @@ body {
     margin: 3px;
     transition-duration: 0.7s;
     border-radius: 10px;
+    box-shadow: none;
 }
 
 .menu-item:hover {
     color: #143B56;
     transition-duration: 0.7s;
     background-color: #F7CB15;
+    box-shadow: 5px 5px 0 #13213b;
+    margin: -4px 9px 4px -4px;
+}
+
+.home-page-menu:hover #home-image {
+    margin-top: -5px;
+    margin-left: -5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    transition-duration: 0.9s;
+}
+
+#home-image {
+    transition-duration: 0.9s;
+}
+
+#home-image-shadow {
+    background-image: url('/resources/images/checkin-black-100.png');
 }

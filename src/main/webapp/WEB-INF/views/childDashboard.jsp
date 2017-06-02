@@ -14,18 +14,26 @@
     <link rel="stylesheet" href="/resources/styles.css" />
 </head>
 <body>
-<div id="nav-bar" class="gutter">
-    <a href="${pageContext.request.contextPath}/">
-        <img src="/resources/images/checkin-color-light.png" height="50px"/>
-    </a>
-    <div id="menu-list">
-        <a href="${pageContext.request.contextPath}/dashboard"><span class="menu-item"><b>Dashboard</b></span></a>
-        <a href="${pageContext.request.contextPath}/action=logout"><span class="menu-item"><b>Logout</b></span></a>
+<div id="nav-bar">
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                <a href="${pageContext.request.contextPath}/">
+                    <img src="/resources/images/checkin-color-light.png" height="50px"/>
+                </a>
+            </div>
+            <div class="col-9">
+                <div id="menu-list">
+                    <a href="${pageContext.request.contextPath}/dashboard"><span class="menu-item"><b>Dashboard</b></span></a>
+                    <a href="${pageContext.request.contextPath}/action=logout"><span class="menu-item"><b>Logout</b></span></a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-12 col-lg-3 gutter">
+        <div class="hidden-lg col-lg-3 gutter">
             <div id="side-bar">
                 <div align="right" id="tlkio" data-channel="checkinroom${family.familyid}">
                     <script async src="http://tlk.io/embed.js" type="text/javascript">
