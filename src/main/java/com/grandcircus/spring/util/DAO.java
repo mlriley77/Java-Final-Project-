@@ -11,6 +11,9 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 
 /**
@@ -41,7 +44,7 @@ public class DAO {
     }
 
     public void newUser(String fName, String lName,
-                               String email, String password,
+                               String email, String key,
                                int usergroup, int familyid) {
         Session browsingSession = sessionFactory.openSession();
         Transaction databaseTransaction = browsingSession.beginTransaction();
@@ -51,7 +54,15 @@ public class DAO {
         user.setLname(lName);
         user.setEmail(email);
         user.setUsergroup(usergroup);
-        user.setPassword(password);
+
+        String lockedGate = "";
+        try {
+            lockedGate = GateKeeper.setLock(key);
+        } catch (IOException |GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+
+        user.setPassword(lockedGate);
         user.setFamilyid(familyid);
 
         browsingSession.save(user);
