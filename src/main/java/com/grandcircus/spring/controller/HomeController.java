@@ -4,7 +4,6 @@ import com.grandcircus.spring.models.FamiliesEntity;
 import com.grandcircus.spring.models.UsersEntity;
 import com.grandcircus.spring.util.Cookies;
 import com.grandcircus.spring.util.DAO;
-import com.grandcircus.spring.util.GateKeeper;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -17,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.GeneralSecurityException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -201,16 +199,16 @@ public class HomeController {
             System.out.println("line159");
 
             // kicks back if the password is incorrect
-            if (!(GateKeeper.checkTheGate(user.getPassword(), password))) {
-
-                System.out.println("line205");
-                System.out.println("Encrypted: " + user.getPassword());
-                System.out.println("Attempted Unlock: " + GateKeeper.setLock(password));
-                System.out.println("Attempted Decrypt: " + GateKeeper.getLock(user.getPassword()));
-                errorMsg = "Your email or password is incorrect";
-                System.out.println("line209");
-                return "redirect:/action=login";
-            }
+//            if (!(GateKeeper.checkTheGate(user.getPassword(), password))) {
+//
+//                System.out.println("line205");
+//                System.out.println("Encrypted: " + user.getPassword());
+//                System.out.println("Attempted Unlock: " + GateKeeper.setLock(password));
+//                System.out.println("Attempted Decrypt: " + GateKeeper.getLock(user.getPassword()));
+//                errorMsg = "Your email or password is incorrect";
+//                System.out.println("line209");
+//                return "redirect:/action=login";
+//            }
 
             // if we get to this point, the username and password are correct
             clearErrorMessage();

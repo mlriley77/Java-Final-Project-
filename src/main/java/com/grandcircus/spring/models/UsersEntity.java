@@ -8,7 +8,7 @@ import java.sql.Timestamp;
  * @version 1.0
  */
 @Entity
-@Table(name = "users", schema = "checkin", catalog = "")
+@Table(name = "users", schema = "checkin")
 public class UsersEntity {
     private int userid;
     private int usergroup;

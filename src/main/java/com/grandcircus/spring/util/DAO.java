@@ -54,21 +54,8 @@ public class DAO {
         user.setLname(lName);
         user.setEmail(email);
         user.setUsergroup(usergroup);
-
-        String lockedGate = "";
-        try {
-            lockedGate = GateKeeper.setLock(key);
-        } catch (IOException |GeneralSecurityException e) {
-            e.printStackTrace();
-        }
-
-        user.setPassword(lockedGate);
-        user.setFamilyid(familyid);
-
-        browsingSession.save(user);
-        databaseTransaction.commit();
-        browsingSession.close();
     }
+
 
     public void updateUserCoordinates(String checkinLat,
                                              String checkinLong,
